@@ -1,18 +1,13 @@
-//import "dotenv/config";
-// import dotenv from 'dotenv';
-// dotenv.config();
 
-//require('dotenv').config()
 import express from 'express';
-//const express = require('express');
+import blogPostosRoutes from "./routes/blog-posts";
+
 
 const app = express();
 
-//app.use(express.json());
+app.use(express.json());    // This middleware will parse incoming JSON requests
+app.use("/posts", blogPostosRoutes);   // This will forward any requests starting with /posts to the blogPostsRoutes
 
-app.get("/",(req, res)=> {
-    res.send("hello server!!");
-});
+
 
 export default app;
-//export = app
