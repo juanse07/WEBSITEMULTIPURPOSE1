@@ -33,6 +33,7 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unkn
         res.status(201).json(newBlogPost);
        
     } catch (error) {
+        console.log(error);
         res.status(500).json({message: "Error fetching blog posts", error});    
   
     }

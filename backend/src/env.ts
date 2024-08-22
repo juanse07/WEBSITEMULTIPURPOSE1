@@ -1,10 +1,11 @@
-// import { cleanEnv, port, str } from 'envalid';
+import { cleanEnv, port, str } from 'envalid';
 
-// const env = cleanEnv(process.env,{
-//     PORT: port(),
-//     MONGO_CONNECTION_STRING: str(),
-// });
+const env = cleanEnv(process.env,{
+    PORT: port(),
+    MONGO_CONNECTION_STRING: str(),
+    WEBSITE_URL: str(),
+});
 
-// export default env;
+export default env;
 
 ///didnt found this useful florian from coding in flow provided to me
