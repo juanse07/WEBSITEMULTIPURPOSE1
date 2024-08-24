@@ -1,6 +1,7 @@
 import { Button, Form } from "react-bootstrap";
 import {useForm} from "react-hook-form";
 import * as BlogApi from "@/network/api/blog";
+import Head from 'next/head';
 interface CreatePostFormData{
     slug: string,
     title: string,
@@ -25,8 +26,12 @@ export default function createPostPage(){
         }
     }
     return(
+        
         <div>
-            <h1>Create a new post</h1>
+            <Head>
+                <title>HandyJuan official Website - Create a new order </title>       
+            </Head>
+            <h1>Create a new order</h1>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Group className="mb-3" controlId="title-input">
                     <Form.Label>Post Title</Form.Label>

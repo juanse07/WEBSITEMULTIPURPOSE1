@@ -1,0 +1,21 @@
+.footer{
+    
+    color: white;
+    text-align: center;
+    font-size: 0.8rem;
+    padding: 10px;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    z-index: 100;
+}
+
+.footer ul{
+    list-style-type: none;
+    padding: 0;
+}
+
+.footer li {
+    display: inline;
+    margin: 0 10px;
+}
