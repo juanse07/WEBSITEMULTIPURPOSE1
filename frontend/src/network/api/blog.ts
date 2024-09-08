@@ -1,5 +1,10 @@
 import { BlogPost } from "@/models/blog-posts"
 import api from "@/network/axiosInstance"
+
+export async function getBlogPosts(){
+    const response = await api.get<BlogPost[]>('/posts/');
+    return response.data;
+}
 interface CreateBlogPostValues {
     slug: string,
     title: string,

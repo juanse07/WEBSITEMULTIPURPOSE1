@@ -3,7 +3,12 @@ import BlogPostModel from "../models/Blogposts"
 
 export const getBlogPosts: RequestHandler = async(req, res, next) => {
     try {
-        const allBlogPosts = await BlogPostModel.find().exec();
+        const allBlogPosts = await BlogPostModel
+        .find()
+        .sort({ _id: -1 })
+        .exec();
+
+        // await new Promise(r=>setTimeout(r, 4000));
         res.status(200).json(allBlogPosts);
     } catch (error) {
         res.status(500).json({message: "Error fetching blog posts", error});    

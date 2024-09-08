@@ -1,7 +1,24 @@
+import BlogPostEntry from '@/components/BlogPostEntry'
+import BlogPostsGrid from '@/components/BlogPostsGrid'
+import { BlogPost } from '@/models/blog-posts'
+import * as BlogApi from '@/network/api/blog'
+import { GetServerSideProps } from 'next'
 import Head from 'next/head'
-import { Button } from 'react-bootstrap'
+import { Button, Col, Row } from 'react-bootstrap'
 
-export default function BlogPage(){
+export const getServerSideProps: GetServerSideProps<BlogPageProps> = async () => {
+    const posts = await BlogApi.getBlogPosts();
+    return {
+        props: {
+            posts
+        }
+    };
+}
+interface BlogPageProps {
+    posts: BlogPost[],
+}
+
+export default function BlogPage({posts}: BlogPageProps){
     return(
         <>
         <Head>
@@ -10,10 +27,15 @@ export default function BlogPage(){
         
       </Head>
         <div>
-            Hello, this is HandyJuan your skilled handyman
+            <h1>Blog</h1>
+            <BlogPostsGrid posts={posts} />
+          
+          
+
+           
+              
         </div>
-        <div><Button>button</Button></div>
-        <div><a href='#'>link</a></div>
-        </>
-    )
+
+        </> 
+    );
 }
