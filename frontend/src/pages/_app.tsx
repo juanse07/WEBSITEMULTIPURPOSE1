@@ -21,8 +21,7 @@ return(
         <title>HandyJuan Official Website</title>
         <meta name="description" content="my production level app" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+        <link rel="icon" href="/favicon.ico" />      </Head>
       <SSRProvider>
       <div className={inter.className}>
 

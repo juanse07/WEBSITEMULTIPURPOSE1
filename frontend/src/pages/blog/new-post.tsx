@@ -2,6 +2,12 @@ import { Button, Form } from "react-bootstrap";
 import {useForm} from "react-hook-form";
 import * as BlogApi from "@/network/api/blog";
 import Head from 'next/head';
+import FormInputField from "@/components/form/FormInputField";
+import MarkDownEditor from "@/components/form/MarkDownEditor";
+import { generateSlug } from "@/utils/utils";
+import { set } from "nprogress";
+import LoadingButton from "@/components/LoadingButton";
+
 interface CreatePostFormData{
     slug: string,
     title: string,
@@ -10,7 +16,7 @@ interface CreatePostFormData{
 }
 export default function createPostPage(){
 
-    const {register, handleSubmit} =useForm<CreatePostFormData>();
+    const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting}} =useForm<CreatePostFormData>();
     
 
     async function onSubmit(input: CreatePostFormData){
@@ -25,6 +31,12 @@ export default function createPostPage(){
             alert("Error creating post");
         }
     }
+    function generateSlugFromTitle(){
+        if(getValues("slug") ) return;
+          
+        const slug= generateSlug(getValues("title"));
+        setValue("slug", slug,{shouldValidate: true});
+    }
     return(
         
         <div>
@@ -33,38 +45,47 @@ export default function createPostPage(){
             </Head>
             <h1>Create a new order</h1>
             <Form onSubmit={handleSubmit(onSubmit)}>
-                <Form.Group className="mb-3" controlId="title-input">
-                    <Form.Label>Post Title</Form.Label>
-                    <Form.Control 
-                    {...register("title")}
-                    placeholder="Enter title" />
-                </Form.Group>
+                <FormInputField 
+                register={register("title", {required: "Title is required"})} 
+                label="Post title"
+                placeholder="post title"
+                maxLength={100}
+                error={errors.title}
+                onBlur={generateSlugFromTitle}
+                />
 
-                <Form.Group className="mb-3" controlId="slug-input">
-                    <Form.Label>Post Slug</Form.Label>
-                    <Form.Control 
-                    {...register("slug")}
-                    placeholder="Enter slug" />
-                </Form.Group>
+                <FormInputField 
+                register={register("slug", {required: "Slug is required"})} 
+                label="Post slug"
+                placeholder="post slug"
+                maxLength={100}
+                error={errors.slug}/>
+                
+                
+                <FormInputField 
+                register={register("summary", {required: "Summary is required"})} 
+                label="Post summary"
+                placeholder="post summary"
+                maxLength={100}
+                error={errors.summary}
+                as="textarea"/>
+                
 
+               
+                <MarkDownEditor
+                label="post Body"
+                register={register("body",{required:"Required"})}
+                watch={watch}
+                setValue={setValue}
+                error={errors.body}
+                />
 
-                <Form.Group className="mb-3" controlId="summary-input">
-                    <Form.Label>Post Summary</Form.Label>
-                    <Form.Control 
-                    {...register("summary")}
-                    placeholder="Enter summary"
-                    as="textarea" />
+              
+                
 
-                </Form.Group>
-
-                <Form.Group className="mb-3" controlId="body-input">
-                    <Form.Label>Post Body</Form.Label>
-                    <Form.Control 
-                    {...register("body")}
-                    placeholder="Enter body"
-                    as="textarea" />   
-                </Form.Group>
-                <Button type="submit">Create Post</Button>
+                 <LoadingButton type="submit" isloading={isSubmitting}>
+                    Create Post
+                    </LoadingButton>
             </Form>
         
                
