@@ -1,9 +1,12 @@
-import { cleanEnv, port, str } from 'envalid';
+import dotenv from 'dotenv';
+dotenv.config(); // This should be at the very top
+import { cleanEnv, str,  port } from 'envalid';
 
-const env = cleanEnv(process.env,{
+const env = cleanEnv(process.env, {
     PORT: port(),
     MONGO_CONNECTION_STRING: str(),
     WEBSITE_URL: str(),
+    SERVER_URL: str(),
 });
 
 export default env;

@@ -38,7 +38,7 @@ return(
             <Component {...pageProps} />
           </Container>
        </main>
-       <Footer/>
+       {/* <Footer/> */}
      </div>
      </SSRProvider>
 </>

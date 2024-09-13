@@ -20,11 +20,11 @@ export default function createPostPage(){
     const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting}} =useForm<CreatePostFormData>();
     
 
-    async function onSubmit({title, slug, summary, featuredImage, body}: CreatePostFormData){
-       alert(JSON.stringify({title, slug, summary, featuredImage:featuredImage[0], body}));
+    async function onSubmit(input: CreatePostFormData){
+       //alert(JSON.stringify(input));
         try {
             
-            await BlogApi.createBlogPost({title, slug, summary, featuredImage:featuredImage[0], body});
+            await BlogApi.createBlogPost(input);
             alert("Post created successfully");
 
         } catch (error) {
@@ -75,7 +75,8 @@ export default function createPostPage(){
                 register={register("featuredImage", {required: "Featured Image is required"})}
                 label="Post Image"
                 type="file"
-                accept="image/png, image/jpeg"
+                accept="image/png, image/jpeg"dlfm, dclx,.dckcddeyrgfJ    ;
+                ;F? ,B?CVBB/V.BV.BVV.C 
                 
                 />
                

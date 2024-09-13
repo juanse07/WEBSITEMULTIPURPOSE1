@@ -5,9 +5,11 @@ const blogPostSchema = new Schema({
     title: { type: String, required: true },
     summary: { type: String, required: true },
     body: { type: String, required: true },
+    featuredImage: { type: String, required: false },
+    
 
 },{timestamps:true});
 
-type BlogPost = InferSchemaType<typeof blogPostSchema >;
+type BlogPost = InferSchemaType<typeof blogPostSchema>;
 
-export default model <BlogPost> ("BlogPost",blogPostSchema);
+export default model <BlogPost> ("BlogPost", blogPostSchema);
