@@ -2,9 +2,12 @@ import BlogPostEntry from '@/components/BlogPostEntry'
 import BlogPostsGrid from '@/components/BlogPostsGrid'
 import { BlogPost } from '@/models/blog-posts'
 import * as BlogApi from '@/network/api/blog'
-import { GetServerSideProps } from 'next'
+import { GetServerSideProps,GetStaticPaths,GetStaticProps } from 'next'
 import Head from 'next/head'
 import { Button, Col, Row } from 'react-bootstrap'
+
+
+
 
 export const getServerSideProps: GetServerSideProps<BlogPageProps> = async () => {
     const posts = await BlogApi.getBlogPosts();

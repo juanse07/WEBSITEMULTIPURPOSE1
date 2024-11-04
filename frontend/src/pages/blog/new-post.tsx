@@ -7,6 +7,7 @@ import MarkDownEditor from "@/components/form/MarkDownEditor";
 import { generateSlug } from "@/utils/utils";
 import { set } from "nprogress";
 import LoadingButton from "@/components/LoadingButton";
+import { useRouter } from "next/router";
 
 interface CreatePostFormData{
     slug: string,
@@ -17,6 +18,8 @@ interface CreatePostFormData{
 }
 export default function createPostPage(){
 
+    const router = useRouter();
+
     const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting}} =useForm<CreatePostFormData>();
     
 
@@ -25,6 +28,8 @@ export default function createPostPage(){
         try {
             
             await BlogApi.createBlogPost({title, slug, summary, featuredImage:featuredImage[0], body});
+            // await router.push("/blog"+ slug);
+            await router.push("/blog/" + slug);
             alert("Post created successfully");
 
         } catch (error) {

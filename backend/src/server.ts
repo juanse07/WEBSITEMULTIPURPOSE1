@@ -1,6 +1,5 @@
 import env from "./env";
 import mongoose from "mongoose";
-
 import app from "./app";
 
 
@@ -28,7 +27,7 @@ mongoose.connect(env.MONGO_CONNECTION_STRING)
   });
 
 
-
+////optional coding without cleanENV
 // import dotenv from 'dotenv';
 // dotenv.config();
 
