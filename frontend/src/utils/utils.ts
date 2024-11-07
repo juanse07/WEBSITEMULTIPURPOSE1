@@ -11,5 +11,5 @@ export function generateSlug(input: string){
 }
 
 export function formatDate(dateString: string){
-    return format(new Date(dateString), 'MM d, yyyy');
+    return format(new Date(dateString), 'MMM d, yyyy');
 }

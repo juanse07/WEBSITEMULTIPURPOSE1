@@ -11,8 +11,7 @@ export default function Home() {
      
       <div>
         
-        hello front page
-    
+     Welcome to HandyJuan services Im here to assist you with your home improvement needs.
        
       </div>
     
