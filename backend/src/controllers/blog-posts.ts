@@ -6,6 +6,7 @@ import sharp from "sharp";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import env from "../env";
+import createHttpError from "http-errors";
 
 //import { addAbortSignal } from "nodemailer/lib/xoauth2";
    
@@ -21,7 +22,7 @@ export const getBlogPosts: RequestHandler = async(req, res, next) => {
         // await new Promise(r=>setTimeout(r, 4000));
         res.status(200).json(allBlogPosts);
     } catch (error) {
-        res.status(500).json({message: "Error fetching blog posts", error});    
+      next(error);
         
     }
 
@@ -36,7 +37,7 @@ export const getallBlogPostSlugs: RequestHandler = async(req, res, next) => {
         const slugs = results.map(post => post.slug);
         res.status(200).json(slugs);
     } catch (error) {
-        res.status(500).json({message: "Error fetching blog posts", error});    
+        next(error);  
         
     }
     
@@ -50,13 +51,13 @@ export const getBlogPostBySlug: RequestHandler<{slug: string}> = async(req, res,
         .exec();
 if (!blogPost) {
         //   return  res.sendStatus(404).json({message: "Blog post not found"});
-        return res.sendStatus(404);
-            
+       // return res.sendStatus(404);
+         throw createHttpError(404, "Blog post not found");   
         }
         res.status(200).json(blogPost);
     } catch (error) {
         console.error('Error fetching blog post:', error);
-        res.status(500).json({message: "Error fetching blog posts", error});    
+        next(error);  
         
     }
 }
@@ -76,6 +77,12 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unkn
    // console.log('Featured Image:', featuredImage);
     try {
         assertIsDefined (featuredImage);
+
+        const existingSlug = await BlogPostModel.findOne({slug}).exec();
+
+        if (existingSlug) {
+            throw createHttpError(400, "Slug already exists");
+        }
         
         const blogPostId = new mongoose.Types.ObjectId();
         console.log('Blog Post ID:', blogPostId);
@@ -87,7 +94,7 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unkn
         await sharp(featuredImage.buffer)
             .resize(700, 450)
             .toFile("./" + featuredImageDestinationPath);
-           // .toFile(featuredImageDestinationPath);
+          
 
         const newBlogPost = await BlogPostModel.create({
             _id: blogPostId,
@@ -107,7 +114,7 @@ console.log('Featured Image URL:', newBlogPost.featuredImageUrl); // Check if th
        
     } catch (error) {
         console.log(error);
-        res.status(500).json({message: "Error fetching blog posts", error});    
+        next(error); 
   
     }
 }
