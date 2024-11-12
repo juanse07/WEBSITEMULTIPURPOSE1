@@ -66,7 +66,6 @@ interface BlogPostbody {
     title: string;
     summary: string;    
     body: string; 
-    
 
 }
 

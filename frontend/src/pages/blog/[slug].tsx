@@ -58,17 +58,14 @@ console.log('Attempting to load image from:', featuredImageUrl)
                 <h1 className="text-center mb-3">{title}</h1>
                 <p className="text-center mb-3 h5">{summary}</p>
                 <span className="text-muted">{createdupdatedText}</span>
-                
+                <div className={styles.featuredImageWrapper}>
                 <Image
                 src={featuredImageUrl} 
                 alt="post Image" 
-                width={700} 
-                height={450} 
+                fill
+                sizes="(max-width: 768px) 100vw, 700px"
                 priority
-
-                
-                
-                
+                className="rounded"
                 onError={(e) => {
                     console.error('Image error details:', {
                       src: e.currentTarget.src,
@@ -79,6 +76,10 @@ console.log('Attempting to load image from:', featuredImageUrl)
                   }}
                   onLoad={() => console.log('Image loaded successfully from:', featuredImageUrl)}
                />
+               </div>
+            </div>
+            <div>
+                {body}
             </div>
         </article>
 
