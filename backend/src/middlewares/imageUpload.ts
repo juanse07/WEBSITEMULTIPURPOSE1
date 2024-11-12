@@ -2,7 +2,7 @@ import multer from 'multer';
 
 
 export const featuredImageUpload = multer({
-    storage: multer.memoryStorage(),////can be deleted
+   // storage: multer.memoryStorage(),////can be deleted
 limits:{
     fileSize: 5 * 1024 * 1024, // 5MB
 },

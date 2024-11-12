@@ -16,7 +16,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
     return {
         paths,
         fallback: "blocking",
-    };
+    };   
 }
 
 export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params }) => {
@@ -35,12 +35,12 @@ interface BlogPostPageProps {
     post:BlogPost,
 }
 
-export default function BlogPostPage({ post:{_id, slug, title, summary,body, feauturedImageUrl, createdAt, updatedAt} }: BlogPostPageProps) {
+export default function BlogPostPage({ post:{_id, slug, title, summary, body, featuredImageUrl, createdAt, updatedAt} }: BlogPostPageProps) {
   const createdupdatedText = updatedAt > createdAt 
   ? <> updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time >
   </>: <time dateTime={createdAt}>{formatDate(createdAt)}</time >;
 
-  
+console.log('Attempting to load image from:', featuredImageUrl)
     return (
     <>
   
@@ -58,16 +58,27 @@ export default function BlogPostPage({ post:{_id, slug, title, summary,body, fea
                 <h1 className="text-center mb-3">{title}</h1>
                 <p className="text-center mb-3 h5">{summary}</p>
                 <span className="text-muted">{createdupdatedText}</span>
-                <Image 
-                src={feauturedImageUrl} 
+                
+                <Image
+                src={featuredImageUrl} 
                 alt="post Image" 
                 width={700} 
                 height={450} 
                 priority
+
+                
+                
                 
                 onError={(e) => {
-                    console.error('Image error:', e);
-                  }}/>
+                    console.error('Image error details:', {
+                      src: e.currentTarget.src,
+                      naturalWidth: e.currentTarget.naturalWidth,
+                      naturalHeight: e.currentTarget.naturalHeight,
+                      error: e
+                    });
+                  }}
+                  onLoad={() => console.log('Image loaded successfully from:', featuredImageUrl)}
+               />
             </div>
         </article>
 

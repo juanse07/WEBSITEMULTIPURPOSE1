@@ -14,7 +14,7 @@ interface CreatePostFormData{
     title: string,
     summary: string,
     body: string,
-    featuredImage: FileList
+    featuredImage: FileList,
 }
 export default function createPostPage(){
 

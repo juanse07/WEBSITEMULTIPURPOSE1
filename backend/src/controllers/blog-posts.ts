@@ -6,7 +6,8 @@ import sharp from "sharp";
 import path from 'path';
 import { fileURLToPath } from 'url';
 import env from "../env";
-import { addAbortSignal } from "nodemailer/lib/xoauth2";
+
+//import { addAbortSignal } from "nodemailer/lib/xoauth2";
    
 
 
@@ -72,19 +73,22 @@ interface BlogPostbody {
 export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unknown > = async(req, res, next) => {
     const {slug, title, summary, body} = req.body;
     const featuredImage = req.file;
-    console.log('Featured Image:', featuredImage);
+    const uploadsPath = path.join(__dirname, '..', 'uploads', 'featured-images');
+   // console.log('Featured Image:', featuredImage);
     try {
         assertIsDefined (featuredImage);
         
         const blogPostId = new mongoose.Types.ObjectId();
         console.log('Blog Post ID:', blogPostId);
 
-        const featuredImageDestinationPath = "/uploads/featured-images/" + blogPostId + ".png";
+        const featuredImageDestinationPath = "/uploads/featured-images/" + blogPostId + ".png";//original
+        //const featuredImageDestinationPath = path.join(uploadsPath, blogPostId + ".png");
         console.log('Featured Image Destination Path:', featuredImageDestinationPath);
 
         await sharp(featuredImage.buffer)
-            .resize(800, 400)
+            .resize(700, 450)
             .toFile("./" + featuredImageDestinationPath);
+           // .toFile(featuredImageDestinationPath);
 
         const newBlogPost = await BlogPostModel.create({
             _id: blogPostId,
@@ -92,11 +96,11 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unkn
             title,
             summary,
             body,
-            featuredImage: env.SERVER_URL + featuredImageDestinationPath,
+            featuredImageUrl: env.SERVER_URL + featuredImageDestinationPath,
         });
-        console.log('New blog post:', newBlogPost);
-console.log('Featured Image URL:', newBlogPost.featuredImage); // Check if the schema includes featuredImageUrl
-console.log('Schema paths:', Object.keys(BlogPostModel.schema.paths));
+      //  console.log('New blog post:', newBlogPost);
+console.log('Featured Image URL:', newBlogPost.featuredImageUrl); // Check if the schema includes featuredImageUrl
+//console.log('Schema paths:', Object.keys(BlogPostModel.schema.paths));
 
 
 

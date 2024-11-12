@@ -5,7 +5,7 @@ const blogPostSchema = new Schema({
     title: { type: String, required: true },
     summary: { type: String, required: true },
     body: { type: String, required: true },
-    featuredImage: { type: String, required: false },
+    featuredImageUrl: { type: String, required: true },
     
 
 },{timestamps:true});
@@ -13,3 +13,4 @@ const blogPostSchema = new Schema({
 type BlogPost = InferSchemaType<typeof blogPostSchema>;
 
 export default model <BlogPost> ("BlogPost", blogPostSchema);
+// Compare this snippet from frontend/src/pages/blog/[slug].tsx:
