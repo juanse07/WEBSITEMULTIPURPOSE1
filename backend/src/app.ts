@@ -1,5 +1,6 @@
 
 import express from 'express';
+import usersroutes from './routes/users';
 import blogPostsRoutes from "./routes/blog-posts";
 import cors from 'cors'; 
 import env from './env';   
@@ -25,8 +26,10 @@ app.use('/uploads/featured-images', express.static(uploadsPath));
 // This will serve the files in the uploads folder
 console.log('Upload path:', uploadsPath);
 app.use("/posts", blogPostsRoutes);   // This will forward any requests starting with /posts to the blogPostsRoutes
+app.use("/users", usersroutes);   // This will forward any requests starting with /users to the usersRoutes
 app.use((req, res, next) => next(createHttpError(404, "End point Not found")));
 app.use(errorHandler);
+
 
 export default app;
  
