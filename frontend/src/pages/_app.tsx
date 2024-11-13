@@ -10,6 +10,10 @@ import styles from "@/styles/App.module.css";
 import NavBar from '@/components/NavBar';
 import Footer from '@/components/Footer';
 import NextNProgress from 'nextjs-progressbar';
+import { Sign } from 'crypto';
+import SignUpModal from '@/components/auth/SignUpModal';
+import LogInModal from '@/components/auth/LogInModal';
+import { on } from 'events';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -39,7 +43,13 @@ return(
             <Component {...pageProps} />
           </Container>
        </main>
-       {/* <Footer/> */}
+       <Footer/>
+       <LogInModal
+       onDismiss={()=> { }}
+       onSignUpInsteadClicked={()=>{ }}
+      onForgotPasswordClicked={()=>{ }}
+    
+       />
      </div>
      </SSRProvider>
 </>
