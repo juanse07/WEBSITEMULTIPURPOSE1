@@ -1,4 +1,4 @@
-
+import "dotenv/config"; // This will read the .env file and add the values to the process.env object
 import express from 'express';
 import usersroutes from './routes/users';
 import blogPostsRoutes from "./routes/blog-posts";
@@ -8,8 +8,10 @@ import morgan from 'morgan';
 import path from 'path';
 import errorHandler from './middlewares/errorHandler';
 import createHttpError from 'http-errors';
-
-
+import session from 'express-session';
+import sessionConfig from './config/session';
+import passport from 'passport';
+import './config/passport';
 
 const app = express();
 const uploadsPath = path.join(__dirname, '..', 'uploads', 'featured-images');
@@ -20,6 +22,10 @@ app.use(express.json());    // This middleware will parse incoming JSON requests
 app.use(cors({
     origin: env.WEBSITE_URL,
 }));
+
+app.use(session(sessionConfig));
+app.use(passport.authenticate("session"));
+
 // This will allow requests from the frontend to the backend
 //app.use("/uploads/featured-images", express.static("uploads/featured-images")); //this is the original
 app.use('/uploads/featured-images', express.static(uploadsPath));
