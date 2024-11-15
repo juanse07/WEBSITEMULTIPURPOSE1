@@ -1,10 +1,15 @@
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Alert } from "react-bootstrap";
 import { useForm } from "react-hook-form";
 import * as UsersApi from "@/network/api/user";
 import Form from "react-bootstrap/Form";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
+import { AxiosError } from "axios";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import { useState } from "react";
+import { BadRequestError, conflictError } from "@/network/api/http-errors";
+
 
 interface SignUpFormData{
     username: string;
@@ -18,25 +23,37 @@ interface SignUpModalProps {
 }
 
 export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpModalProps) {
+
+    const { mutateUser} = useAuthenticatedUser();
+    const [errorText, setErrorText] = useState<string | null>(null);
     
     const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormData>();
     
     async function onSubmit(credentials: SignUpFormData){
         try{
+            setErrorText(null);
     const newUser = await UsersApi.signup(credentials);
-    alert(JSON.stringify(newUser));
+   mutateUser(newUser);
+   onDismiss();
         }catch(error){
+            if(error instanceof conflictError || error instanceof BadRequestError){
+                setErrorText(error.message);
+            }else {
+
+            console.log(error);
             alert(error);
         }
     }
+} 
 
     return (
-        <Modal  onHide={onDismiss} centered>
+        <Modal show  onHide={onDismiss} centered>
             <Modal.Header closeButton>
                 <Modal.Title>Sign Up</Modal.Title>
             </Modal.Header>
             <Modal.Body>
-              
+              {errorText && <Alert 
+                variant="danger">{errorText}</Alert>}
                 <Form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <FormInputField
                 register={register("username", {required: "Username is required"})}

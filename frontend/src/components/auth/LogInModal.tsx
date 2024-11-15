@@ -1,9 +1,13 @@
 import {useForm} from "react-hook-form";
 import * as UsersApi from "@/network/api/user";
-import { Button, Form, Modal } from "react-bootstrap";
+import { Button, Form, Modal, Alert} from "react-bootstrap";
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
+import { useState } from "react";
+import { UnauthorizedError } from "@/network/api/http-errors";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import { mutate } from "swr";
 
 interface LoginFormData {
     username: string;
@@ -18,16 +22,26 @@ interface LoginModalProps {
 }
 
 export default function LogInModal({onDismiss, onSignUpInsteadClicked, onForgotPasswordClicked}: LoginModalProps): JSX.Element {
-   const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<LoginFormData>();
+   const { mutateUser} = useAuthenticatedUser();
+    const [errorText, setErrorText] = useState<string | null>(null);
+    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<LoginFormData>();
    async function onSubmit(credentials: LoginFormData){
          try{
+                setErrorText(null);
               const user = await UsersApi.login(credentials);
-              alert(JSON.stringify(user));
-         }catch(error){
+              mutateUser(user);
+            onDismiss();
+            }catch(error){
+            if (error instanceof UnauthorizedError){
+                setErrorText("Invalid username or password");
+            }else{
+
             console.log(error);
               alert(error);
          }
    }
+
+}
     return(
         <Modal show onHide={onDismiss} centered>
             
@@ -35,6 +49,8 @@ export default function LogInModal({onDismiss, onSignUpInsteadClicked, onForgotP
                 <Modal.Title>Log In</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+                {errorText && <Alert 
+                variant="danger">{errorText}</Alert>}
                 <Form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <FormInputField
                 register={register("username", {required: "Username is required"})}

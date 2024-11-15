@@ -44,7 +44,7 @@ export default function App({ Component, pageProps }: AppProps) {
    
   // }, []);
 
-  const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser();
+ // const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser(); /// removed because of the use of the useSWR hook
 return(
 <>
     <Head>
@@ -65,8 +65,7 @@ return(
          />
         
         <NavBar/>
-        <div>{user?.username}</div>
-       
+        
         
         <main>
           <Container className={styles.pageContainer}> 
