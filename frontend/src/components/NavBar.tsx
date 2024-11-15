@@ -30,8 +30,8 @@ export default function NavBar() {
                                 Contact</Nav.Link>
                 </Nav>
                 <Nav className="ms-auto">
-                    <Nav.Link as={Link} href='/login' active={router.pathname==="/login"}>Login</Nav.Link>
-                    <Nav.Link as={Link} href='/register' active={router.pathname==="/register"}>Register</Nav.Link>
+                    <Nav.Link as={Link} href='/login' active={router.pathname==="users/login"}>Login</Nav.Link>
+                    <Nav.Link as={Link} href='/register' active={router.pathname==="users/signup"}>Register</Nav.Link>
                 </Nav>
             </Navbar.Collapse>
         </Navbar>

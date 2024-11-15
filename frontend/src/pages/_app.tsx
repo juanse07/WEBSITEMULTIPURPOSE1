@@ -14,11 +14,37 @@ import { Sign } from 'crypto';
 import SignUpModal from '@/components/auth/SignUpModal';
 import LogInModal from '@/components/auth/LogInModal';
 import { on } from 'events';
-
+import { useEffect, useState } from 'react';
+import {User} from '@/models/user';
+import * as UsersApi from '@/network/api/user';
+import useSwr from 'swr';
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 
 const inter = Inter({ subsets: ['latin'] })
 
+
+
 export default function App({ Component, pageProps }: AppProps) {
+
+  // const[user, setUser] = useState<User | null>(null);
+
+  // useEffect(() => {
+  //   async function fetchUser(){
+  //   try {
+  //     const user = await UsersApi.getAuthenticatedUser();
+  //     console.log('Current user state:', user); // Add this line to debug
+  //     setUser(user);
+     
+  //   } catch (error) {
+  //     console.error(error);
+      
+  //   }
+  // }
+  // fetchUser();
+   
+  // }, []);
+
+  const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser();
 return(
 <>
     <Head>
@@ -37,19 +63,24 @@ return(
           height={3}
           showOnShallow={true}    
          />
+        
         <NavBar/>
+        <div>{user?.username}</div>
+       
+        
         <main>
           <Container className={styles.pageContainer}> 
             <Component {...pageProps} />
           </Container>
+         
        </main>
-       <Footer/>
+       {/* <Footer/>
        <LogInModal
        onDismiss={()=> { }}
        onSignUpInsteadClicked={()=>{ }}
       onForgotPasswordClicked={()=>{ }}
     
-       />
+       /> */}
      </div>
      </SSRProvider>
 </>
