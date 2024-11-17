@@ -5,6 +5,7 @@ export interface BlogPost {
     summary: string,
     body: string,
     featuredImageUrl: string,
+    author: User
     createdAt: string,
     updatedAt: string,
 }

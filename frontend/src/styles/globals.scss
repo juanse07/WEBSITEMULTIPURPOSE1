@@ -1,6 +1,8 @@
 @import "custom-theme";
 @import 'react-markdown-editor-lite/lib/index.css';
 :root {
+
+  --popup-box-shadow: 3px 3px 13px 4px rgba(0, 0, 0, 0.3);
   
 }
 
@@ -142,3 +144,15 @@ blockquote,
 
 }
 
+.tooltip.show{
+  opacity: 1;
+  display: block;
+}
+.dropdown-menu{
+box-shadow:var(--popup-box-shadow) ;
+}
+
+.tooltip-inner{
+  background-color: var(--bs-tooltip-bg);
+  color: var(--bs-tooltip-color);
+box-shadow:var(--popup-box-shadow) ;}

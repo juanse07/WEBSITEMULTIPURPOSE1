@@ -11,4 +11,14 @@
     font-weight: bold;
     color: #fff;
     text-decoration: none;
+    
+    ;
+}
+
+.accountDropdown :global(.dropdown-toggle){
+    padding-top: 0;
+    padding-bottom: 0;
+    d-flex: align-items-center;
+    gap: 2px;
+
 }

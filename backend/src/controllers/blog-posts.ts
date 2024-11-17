@@ -17,6 +17,7 @@ export const getBlogPosts: RequestHandler = async(req, res, next) => {
         const allBlogPosts = await BlogPostModel
         .find()
         .sort({ _id: -1 })
+        .populate("author")
         .exec();
 
         // await new Promise(r=>setTimeout(r, 4000));
@@ -48,6 +49,7 @@ export const getBlogPostBySlug: RequestHandler<{slug: string}> = async(req, res,
     try {
         const blogPost = await BlogPostModel
         .findOne({slug: req.params.slug})
+        .populate("author") 
         .exec();
 if (!blogPost) {
         //   return  res.sendStatus(404).json({message: "Blog post not found"});
@@ -74,10 +76,11 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unkn
     const {slug, title, summary, body} = req.body;
     const featuredImage = req.file;
     const uploadsPath = path.join(__dirname, '..', 'uploads', 'featured-images');
+    const authenticatedUser = req.user;
    // console.log('Featured Image:', featuredImage);
     try {
         assertIsDefined (featuredImage);
-
+        assertIsDefined(authenticatedUser);
         const existingSlug = await BlogPostModel.findOne({slug}).exec();
 
         if (existingSlug) {
@@ -103,6 +106,7 @@ export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unkn
             summary,
             body,
             featuredImageUrl: env.SERVER_URL + featuredImageDestinationPath,
+            author: authenticatedUser._id,
         });
       //  console.log('New blog post:', newBlogPost);
 console.log('Featured Image URL:', newBlogPost.featuredImageUrl); // Check if the schema includes featuredImageUrl
