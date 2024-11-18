@@ -1,3 +1,4 @@
+import { User } from './user';
 export interface BlogPost {
     _id: string,
     slug: string,

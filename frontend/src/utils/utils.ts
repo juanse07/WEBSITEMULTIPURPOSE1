@@ -2,11 +2,11 @@ import format from 'date-fns/format';
 
 export function generateSlug(input: string){
     return input
-    .replace(/[^a-zA-Z0-9 -]/g, '')
+    .replace(/[^a-zA-Z0-9 ]/g, '')
     .trim()
-    .replace(/\s+/g, '-')
-    .replace(/-+/g, '-')
-    .toLowerCase();
+    .replace(/ +/g, " ")
+    .replace(/\s/g, '-')
+    
 
 }
 

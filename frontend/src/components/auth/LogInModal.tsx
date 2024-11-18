@@ -1,6 +1,7 @@
 import {useForm} from "react-hook-form";
 import * as UsersApi from "@/network/api/user";
 import { Button, Form, Modal, Alert} from "react-bootstrap";
+import { yupResolver } from '@hookform/resolvers/yup';
 import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
@@ -8,12 +9,15 @@ import { useState } from "react";
 import { UnauthorizedError } from "@/network/api/http-errors";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { mutate } from "swr";
+import * as yup from "yup";
+import { requiredStringschema } from "@/utils/validation";
 
-interface LoginFormData {
-    username: string;
-    password: string;
+const validationschema = yup.object().shape({
+    username: requiredStringschema,
+    password: requiredStringschema,
+});
 
-}
+ type LoginFormData = yup.InferType<typeof validationschema>;
 
 interface LoginModalProps {
     onDismiss: () => void,
@@ -24,7 +28,9 @@ interface LoginModalProps {
 export default function LogInModal({onDismiss, onSignUpInsteadClicked, onForgotPasswordClicked}: LoginModalProps): JSX.Element {
    const { mutateUser} = useAuthenticatedUser();
     const [errorText, setErrorText] = useState<string | null>(null);
-    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<LoginFormData>();
+    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<LoginFormData>({
+        resolver: yupResolver(validationschema)
+    });
    async function onSubmit(credentials: LoginFormData){
          try{
                 setErrorText(null);

@@ -8,19 +8,27 @@ import { generateSlug } from "@/utils/utils";
 import { set } from "nprogress";
 import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/router";
+import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { requiredFileSchema, requiredStringschema, slugSchema } from "@/utils/validation";
 
-interface CreatePostFormData{
-    slug: string,
-    title: string,
-    summary: string,
-    body: string,
-    featuredImage: FileList,
-}
+const validationSchema = yup.object({
+    title: requiredStringschema,
+    slug: slugSchema.required("Slug is required"),
+    summary: requiredStringschema,
+    featuredImage: requiredFileSchema,
+    body: requiredStringschema,
+});
+type CreatePostFormData = yup.InferType<typeof validationSchema>;
+
+
 export default function createPostPage(){
 
     const router = useRouter();
 
-    const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting}} =useForm<CreatePostFormData>();
+    const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting}} =useForm<CreatePostFormData>({
+        resolver: yupResolver(validationSchema),
+});
     
 
     async function onSubmit({title, slug, summary, featuredImage, body}: CreatePostFormData){
@@ -52,7 +60,7 @@ export default function createPostPage(){
             <h1>Create a new order</h1>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <FormInputField 
-                register={register("title", {required: "Title is required"})} 
+                register={register("title")} 
                 label="Post title"
                 placeholder="post title"
                 maxLength={100}
@@ -61,7 +69,7 @@ export default function createPostPage(){
                 />
 
                 <FormInputField 
-                register={register("slug", {required: "Slug is required"})} 
+                register={register("slug")} 
                 label="Post slug"
                 placeholder="post slug"
                 maxLength={100}
@@ -69,7 +77,7 @@ export default function createPostPage(){
                 
                 
                 <FormInputField 
-                register={register("summary", {required: "Summary is required"})} 
+                register={register("summary")} 
                 label="Post summary"
                 placeholder="post summary"
                 maxLength={100}
@@ -77,16 +85,17 @@ export default function createPostPage(){
                 as="textarea"/>
                 
                 <FormInputField
-                register={register("featuredImage", {required: "Featured Image is required"})}
+                register={register("featuredImage")}
                 label="Post Image"
                 type="file"
                 accept="image/png, image/jpeg"
+                error={errors.featuredImage}
                 
                 />
                
                 <MarkDownEditor
                 label="post Body"
-                register={register("body",{required:"Required"})}
+                register={register("body")}
                 watch={watch}
                 setValue={setValue}
                 error={errors.body}

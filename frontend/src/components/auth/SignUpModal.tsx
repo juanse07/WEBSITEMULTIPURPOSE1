@@ -9,13 +9,23 @@ import { AxiosError } from "axios";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { useState } from "react";
 import { BadRequestError, conflictError } from "@/network/api/http-errors";
+import * as yup from "yup";
+import { yupResolver } from '@hookform/resolvers/yup';
+import { passwordSchema, usernameSchema,emailSchema } from "@/utils/validation";
 
 
-interface SignUpFormData{
-    username: string;
-    email: string;
-    password: string;
-}
+const validationSchema = yup.object({
+
+    username: usernameSchema.required("Username is required"),
+    email: emailSchema.required("Email is required"),
+    password: passwordSchema.required("Password is required"),
+
+});
+
+type SignUpFormData = yup.InferType<typeof validationSchema>;
+
+
+
 
 interface SignUpModalProps {
     onDismiss: () => void,
@@ -27,7 +37,9 @@ export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpMo
     const { mutateUser} = useAuthenticatedUser();
     const [errorText, setErrorText] = useState<string | null>(null);
     
-    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormData>();
+    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormData>({
+        resolver:yupResolver(validationSchema)
+    });
     
     async function onSubmit(credentials: SignUpFormData){
         try{
