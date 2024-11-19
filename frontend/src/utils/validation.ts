@@ -17,8 +17,7 @@ export const usernameSchema = yup.string()
 
 
 export const passwordSchema = yup.string()
-    .min(6, "Password must be at least 8 characters")
-    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
     .matches(/^(?!.* )/, "Password cannot contain spaces");
 
 export const slugSchema = yup.string()

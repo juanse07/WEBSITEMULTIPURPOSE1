@@ -7,8 +7,9 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import env from "../env";
 import createHttpError from "http-errors";
+import { BlogPostBody } from "../validation/blog-post";
 
-//import { addAbortSignal } from "nodemailer/lib/xoauth2";
+
    
 
 
@@ -64,15 +65,7 @@ if (!blogPost) {
     }
 }
 
-interface BlogPostbody {
-    slug: string;
-    title: string;
-    summary: string;    
-    body: string; 
-
-}
-
-export const createBlogPost: RequestHandler<unknown, unknown, BlogPostbody, unknown > = async(req, res, next) => {
+export const createBlogPost: RequestHandler<unknown, unknown, BlogPostBody, unknown > = async(req, res, next) => {
     const {slug, title, summary, body} = req.body;
     const featuredImage = req.file;
     const uploadsPath = path.join(__dirname, '..', 'uploads', 'featured-images');
