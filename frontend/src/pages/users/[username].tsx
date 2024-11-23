@@ -16,17 +16,34 @@ import{useForm} from "react-hook-form"
 import FormInputField from '@/components/form/FormInputField';
 import LoadingButton from '@/components/LoadingButton';
 import useSWR from 'swr';
+import { NotFoundError } from "@/network/api/http-errors";
 
 
 export const getServerSideProps: GetServerSideProps<UserProfilePageProps> = async ({ params }) => {
-    const username = params?.username?.toString();
-    if (!username) throw Error("No username provided");
-    const user = await UserApi.getUserByUsername(username);
-    return {
-        props: {
-            user
+    try {
+
+        const username = params?.username?.toString();
+        if (!username) throw Error("No username provided");
+        const user = await UserApi.getUserByUsername(username);
+        return {
+            props: {
+                user
+            }
+        };
+        
+    } catch (error) {
+
+        if (error instanceof NotFoundError) {
+            return {
+                notFound: true,
+            };
+        }else {
+            throw error;
         }
-    };
+        
+    }
+    
+   
 };
 interface UserProfilePageProps {
     user: User,
@@ -180,7 +197,7 @@ function UserBlogPostSection({ user }:UserBlogPostSectionProps) {
                     <div key={blogPost._id} className='mb-3'>
               
                       <h3>{blogPost.title}</h3>
-                        <p>{blogPost.content}</p>
+                        <p>{blogPost.summary}</p>
                     </div>
                 ))}
             

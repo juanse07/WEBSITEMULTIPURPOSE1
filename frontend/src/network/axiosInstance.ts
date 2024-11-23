@@ -1,8 +1,13 @@
 
+
 import axios from 'axios';
 import { BadRequestError, UnauthorizedError, NotFoundError, conflictError, ToomanyrequestError } from './api/http-errors';
+
+
+
 const axiosInstance = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+   baseURL: process.env.NEXT_PUBLIC_BACKEND_URL,
+   
     timeout:5000,
     withCredentials: true,
    

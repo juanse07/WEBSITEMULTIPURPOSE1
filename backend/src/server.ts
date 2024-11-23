@@ -19,7 +19,7 @@ if (!env.MONGO_CONNECTION_STRING) {
 mongoose.connect(env.MONGO_CONNECTION_STRING)
   .then(() => {
     console.log("Successfully connected to MongoDB.");
-    app.listen(port, () => console.log(`Server running on port: ${port}`));
+    app.listen(port,  () => console.log(`Server running on port: ${port}`));
   })
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);

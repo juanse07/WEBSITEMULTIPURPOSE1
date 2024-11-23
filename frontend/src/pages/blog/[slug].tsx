@@ -7,6 +7,7 @@ import styles from '@/styles/BlogPostPage.module.css';
 import Link from "next/link";
 import { formatDate } from "@/utils/utils";
 import Image from 'next/image';
+import { NotFoundError } from "@/network/api/http-errors";
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -20,6 +21,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
 }
 
 export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params }) => {
+try {
+
     const slug = params?.slug?.toString()!;
     if (!slug) throw Error("No slug provided");
     const post = await BlogApi.getBlogPostBySlug(slug);
@@ -28,6 +31,18 @@ export const getStaticProps: GetStaticProps<BlogPostPageProps> = async ({ params
             post
         }
     };
+    
+} catch (error) {
+    if (error instanceof NotFoundError) {
+        return {
+            notFound: true,
+        };
+    }else {
+        throw error;
+    }
+    
+}
+    
 }
 
 
