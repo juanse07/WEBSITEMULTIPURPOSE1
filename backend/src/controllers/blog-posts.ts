@@ -7,16 +7,19 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import env from "../env";
 import createHttpError from "http-errors";
-import { BlogPostBody } from "../validation/blog-post";
+import { BlogPostBody, GetBlogPostQuery } from "../validation/blog-post";
 
 
    
 
 
-export const getBlogPosts: RequestHandler = async(req, res, next) => {
+export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostQuery> = async(req, res, next) => {
+    const authorId = req.query.authorId;
+    const filter =authorId ? {author: authorId} : { };// same author as in models/blogposts.ts
+   
     try {
         const allBlogPosts = await BlogPostModel
-        .find()
+        .find(filter)
         .sort({ _id: -1 })
         .populate("author")
         .exec();

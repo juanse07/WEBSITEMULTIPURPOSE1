@@ -1,18 +1,19 @@
 import * as yup from "yup";
+import { imageFileSchema } from "../utils/validation";
 
  const usernameSchema = yup.string()
     .min(3)
-    .max(30)
-    .required()
+    .max(30)  
     .matches(/^[a-zA-Z0-9_]*$/);
 
 const emailSchema = yup.string()
     .email();
 
 const passwordSchema = yup.string()
-    .min(6)
-    .required()
+    .min(6) 
     .matches(/^(?!.* )/);
+
+
 
     export const signUpSchema = yup.object({
         body: yup.object({
@@ -27,3 +28,17 @@ const passwordSchema = yup.string()
 export type SignUpBody = yup.InferType<typeof signUpSchema>[
     'body'
 ];
+
+export const updateUserSchema = yup.object({
+
+    body:yup.object({
+        username: usernameSchema,
+        displayName: yup.string().max(30),
+        about: yup.string().max(200),
+        // email: emailSchema,
+        // password: passwordSchema,
+    }),
+    file: imageFileSchema,
+
+});
+export type UpdateUserBody = yup.InferType<typeof updateUserSchema>['body'];

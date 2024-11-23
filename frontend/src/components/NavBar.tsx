@@ -10,7 +10,8 @@ import { useState } from 'react';
 import LogInModal from './auth/LogInModal';
 import SignUpModal from './auth/SignUpModal';
 import { User } from '@/models/user';
-import profilePicPlaceholder from '@/assets/images/baby.png';
+import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
+
 import * as UsersApi from '@/network/api/user';
 
 export default function NavBar() {
@@ -72,7 +73,7 @@ function LoggedIniew( {user}: LoggedIniewProps) {
        className="d-flex align-items-center gap-2"
        title = {
               <Image 
-              src={user.profilePictureUrl || profilePicPlaceholder}
+              src={user.profilePicUrl || profilePicPlaceholder}
               alt={user.displayName || "User"}
               width={70}
               height={70}

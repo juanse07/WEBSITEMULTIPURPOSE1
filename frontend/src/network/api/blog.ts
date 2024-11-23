@@ -1,9 +1,16 @@
 import { BlogPost } from "@/models/blog-posts"
 import api from "@/network/axiosInstance"
 
+
 export async function getBlogPosts(){
-    const response = await api.get<BlogPost[]>("/posts/");
+    const response = await api.get<BlogPost[]>("/posts");
     return response.data;
+}
+
+export async function getBlogPostsByUser(userId: string){
+    const response = await api.get<BlogPost[]>(`/posts?authorId=${userId}`);
+    return response.data;
+
 }
 
 export async function getAllBlogPostSlugs(){

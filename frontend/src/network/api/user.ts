@@ -5,6 +5,11 @@ export async function getAuthenticatedUser(){
     return response.data;
 }
 
+export async function getUserByUsername(username: string){
+    const response = await api.get<User>(`/users/profile/${username}`);
+    return response.data;
+}
+
 interface SignUpalues{
     username: string;
     email: string;
@@ -29,4 +34,31 @@ export async function login(credentials: LoginValues){
 
 export async function logout(){
     await api.post("/users/logout");
+}
+
+interface UpdateUserValues{
+    username?: string;
+    displayName?: string;
+    about?: string;
+    profilePic?: File;
+}
+
+export async function updateUser(input: UpdateUserValues){
+    const formData = new FormData();
+    Object.entries(input).forEach(([key, value]) => {
+        if(value !== undefined)
+            formData.append(key, value);
+
+        console.log('Form data being sent:', formData);
+       
+        
+
+    });
+    const response = await api.patch<User>("/users/me", formData);
+   
+    console.log('Response received:', response.data);
+    
+    return response.data;
+    
+   
 }

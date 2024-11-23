@@ -9,7 +9,7 @@ interface BlogPostGridProps {
 
 export default function BlogPostsGrid({ posts }: BlogPostGridProps) {
     return (
-        <Row xs ={1} sm={2} lg={3} classname= 'g-4'>
+        <Row xs ={1} sm={2} lg={3} className= 'g-4'>
         { posts.map((post) => (
             <Col className='g-4' key={post._id}>
               <BlogPostEntry post={post} className={styles.entry}/>

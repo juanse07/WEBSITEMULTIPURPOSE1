@@ -1,5 +1,5 @@
 import {User} from '@/models/user';
-import profilePicPlaceholder from '@/assets/images/pig.png';
+import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
 import Image from 'next/image';
 import Link from 'next/link';
 import { OverlayTrigger, Tooltip } from 'react-bootstrap';
@@ -21,7 +21,7 @@ export default function UserProfileLink({ user }: UserProfileLinkProps) {
         delay={{show:500, hide:0}}>
        <span className='d-flex aling-items-center w-fit-content'>
             <Image 
-            src={user.profileImageUrl || profilePicPlaceholder} 
+            src={user.profilePicUrl || profilePicPlaceholder} 
             alt={"Profile picture of " + user.username} 
             width={40} 
             height={40} 

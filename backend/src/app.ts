@@ -15,8 +15,12 @@ import './config/passport';
 
 const app = express();
 const uploadsPath = path.join(__dirname, '..', 'uploads', 'featured-images');
+const profilePicUploadPath = path.join(__dirname, '..', 'uploads', 'profile-pictures');
+
 //const uploadsPath = path.join('..', 'uploads', 'featured-images');
 console.log('Static files path:', uploadsPath);
+console.log('Static profilePic path:', profilePicUploadPath);
+
 app.use(morgan('dev')); // This will log all incoming requests to the console
 app.use(express.json());    // This middleware will parse incoming JSON requests
 app.use(cors({
@@ -29,9 +33,14 @@ app.use(passport.authenticate("session"));
 
 // This will allow requests from the frontend to the backend
 //app.use("/uploads/featured-images", express.static("uploads/featured-images")); //this is the original
+app.use("/uploads/profile-pictures/", express.static("uploads/profile-pictures")); //this is the original
 app.use('/uploads/featured-images', express.static(uploadsPath));
+// In your Express backend
+
+//app.use('/uploads/profile-pictures', express.static(profilePicUploadPath));
+
 // This will serve the files in the uploads folder
-console.log('Upload path:', uploadsPath);
+// console.log('Upload path:', uploadsPath);
 app.use("/posts", blogPostsRoutes);   // This will forward any requests starting with /posts to the blogPostsRoutes
 app.use("/users", usersroutes);   // This will forward any requests starting with /users to the usersRoutes
 app.use((req, res, next) => next(createHttpError(404, "End point Not found")));

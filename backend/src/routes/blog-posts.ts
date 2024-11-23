@@ -3,12 +3,12 @@ import * as blogPostsController from "../controllers/blog-posts";
 import { featuredImageUpload } from "../middlewares/imageUpload";
 import requiresAuth from "../middlewares/requiresAuth";
 import validateRequestSchema from "../middlewares/validateRequestSchema";
-import { createBlogPostSchema } from "../validation/blog-post";
+import { createBlogPostSchema, getBlogPostSchema } from "../validation/blog-post";
 
 
 const router = express.Router();
 
-router.get("/", blogPostsController.getBlogPosts);
+router.get("/", validateRequestSchema(getBlogPostSchema), blogPostsController.getBlogPosts);
 router.get("/slugs", blogPostsController.getallBlogPostSlugs);
 // router.get("/:slug", blogPostsController.getBlogPostsBySlug);
 router.get("/post/:slug", blogPostsController.getBlogPostBySlug);
