@@ -1,14 +1,14 @@
-import { BlogPost } from "@/models/blog-posts"
+import { BlogPost, BlogPostPage } from "@/models/blog-posts"
 import api from "@/network/axiosInstance"
 
 
-export async function getBlogPosts(){
-    const response = await api.get<BlogPost[]>("/posts");
+export async function getBlogPosts(page: number = 1){
+    const response = await api.get<BlogPostPage>("/posts?page=" + page);
     return response.data;
 }
 
-export async function getBlogPostsByUser(userId: string){
-    const response = await api.get<BlogPost[]>(`/posts?authorId=${userId}`);
+export async function getBlogPostsByUser(userId: string, page: number = 1){
+    const response = await api.get<BlogPostPage>(`/posts?authorId=${userId}&page=${page}`);
     return response.data;
 
 }

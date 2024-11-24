@@ -15,17 +15,30 @@ import { BlogPostBody, GetBlogPostQuery } from "../validation/blog-post";
 
 export const getBlogPosts: RequestHandler<unknown, unknown, unknown, GetBlogPostQuery> = async(req, res, next) => {
     const authorId = req.query.authorId;
+    const page = parseInt(req.query.page || "1");
+    const pageSize = 6;
     const filter =authorId ? {author: authorId} : { };// same author as in models/blogposts.ts
    
     try {
-        const allBlogPosts = await BlogPostModel
+        const getBlogPostQuery =  BlogPostModel
         .find(filter)
         .sort({ _id: -1 })
+        .skip((page - 1) * pageSize)
+        .limit(pageSize)
         .populate("author")
         .exec();
 
+        const countDocumentsQuery = await BlogPostModel.countDocuments(filter).exec();
+        const [blogPosts, totalBlogPosts] = await Promise.all([getBlogPostQuery, countDocumentsQuery]);
+
+        const totalPages = Math.ceil(totalBlogPosts / pageSize);
+
         // await new Promise(r=>setTimeout(r, 4000));
-        res.status(200).json(allBlogPosts);
+        res.status(200).json({
+            blogPosts,
+            page,
+            totalPages,
+        });
     } catch (error) {
       next(error);
         

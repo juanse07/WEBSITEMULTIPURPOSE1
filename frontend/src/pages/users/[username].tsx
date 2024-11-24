@@ -17,6 +17,8 @@ import FormInputField from '@/components/form/FormInputField';
 import LoadingButton from '@/components/LoadingButton';
 import useSWR from 'swr';
 import { NotFoundError } from "@/network/api/http-errors";
+import BlogPostsGrid from '@/components/BlogPostsGrid'
+import PaginationBar from '@/components/PaginationBar';
 
 
 export const getServerSideProps: GetServerSideProps<UserProfilePageProps> = async ({ params }) => {
@@ -44,12 +46,23 @@ export const getServerSideProps: GetServerSideProps<UserProfilePageProps> = asyn
     }
     
    
-};
+}
+
 interface UserProfilePageProps {
     user: User,
 }
+export default function UserProfilePage({user}: UserProfilePageProps) {
+    return (
 
-export default function UserProfilePage({ user }: UserProfilePageProps) {
+        <UserProfile user={user} key={user._id}/>
+    );
+
+}
+interface ProfilePageProps {
+    user: User,
+}
+
+function UserProfile({ user }: ProfilePageProps) {
     const {user:loggedInUser,mutateUser:mutateLoggedInUser} = useAuthenticatedUser();
     const [profileUser,setprofileUser] = useState(user);
     const isProfileOwner = (loggedInUser && (loggedInUser?._id === profileUser._id)) || false;
@@ -180,26 +193,36 @@ function UpdateUserProfileSection({onUserUpdated} : UpdateUserProfileSectionProp
 }
 interface UserBlogPostSectionProps {
     user: User,
+ 
+
 }
-
+ 
 function UserBlogPostSection({ user }:UserBlogPostSectionProps) {
+    const[page, setPage] = useState(1);
 
-    const {data : blogPosts, isLoading: blogPostsLoading, error: blogPostsLoadingError}= useSWR(user._id, BlogApi.getBlogPostsByUser);
+    const { data, isLoading: blogPostsLoading, error: blogPostsLoadingError} = 
+    useSWR([user._id, page, "user_posts"], ([userId, page]) => BlogApi.getBlogPostsByUser(userId, page));
+  
+    const blogPosts = data?.blogPosts|| []; 
+    const totalPages = data?.totalPages || 0;
+    
+    
+    
     return (
         <div>
             <h2>Blog Posts</h2>
+            {blogPosts.length > 0 && <BlogPostsGrid posts={blogPosts}/>}
             <div className='d-flex flex-column align-items-center'>
+                {blogPosts.length > 0 && <PaginationBar 
+                currentPage={page} 
+                pageCount={totalPages} 
+                onPageItemClick={(page) => setPage(page)} className='mt-4'/>}
                 {blogPostsLoading && <Spinner animation="border" role="status"/>}
                 {blogPostsLoadingError && <p>Error loading blog posts</p>}
-                {blogPosts && blogPosts.length === 0 && <p>This user hasn&apos;t written any blog posts yet</p>}
+                {!blogPostsLoading && blogPostsLoadingError && blogPosts.length === 0 && 
+                 <p>This user hasn&apos;t written any blog posts yet</p>}
                 </div>
-                {blogPosts && blogPosts.map(blogPost => (
-                    <div key={blogPost._id} className='mb-3'>
-              
-                      <h3>{blogPost.title}</h3>
-                        <p>{blogPost.summary}</p>
-                    </div>
-                ))}
+               
             
         </div>
      

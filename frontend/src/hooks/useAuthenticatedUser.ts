@@ -3,7 +3,7 @@ import * as UsersApi from '@/network/api/user';
 import { UnauthorizedError } from "@/network/api/http-errors";
 
 export default function useAuthenticatedUser() {
-    const {data, isLoading, error, mutate}= useSwr("user", 
+    const {data, isLoading, error, mutate}= useSwr("authenticated_user", 
         async () => {
             try {
                 return await UsersApi.getAuthenticatedUser();
