@@ -27,7 +27,7 @@ const validationSchema = yup.object({
 type CreatePostFormData = yup.InferType<typeof validationSchema>;
 
 
-export default function createPostPage(){
+export default function CreatePostPage(){
    
 
     const router = useRouter();
@@ -38,13 +38,13 @@ export default function createPostPage(){
     
 
     async function onSubmit({title, slug, summary, featuredImage, body}: CreatePostFormData){
-       alert(JSON.stringify({title, slug, summary, featuredImage:featuredImage[0], body}));
+     //  alert(JSON.stringify({title, slug, summary, featuredImage:featuredImage[0], body}));
         try {
             
             await BlogApi.createBlogPost({title, slug, summary, featuredImage:featuredImage[0], body});
             
             await router.push("/blog/" + slug);
-            alert("Post created successfully");
+           // alert("Post created successfully");
 
         } catch (error) {
             console.error(error);

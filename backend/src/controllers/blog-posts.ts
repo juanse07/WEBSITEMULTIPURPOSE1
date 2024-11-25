@@ -9,6 +9,7 @@ import env from "../env";
 import createHttpError from "http-errors";
 import { BlogPostBody, DeleteBlogPostParams, GetBlogPostQuery, UpdateBlogPostParams } from "../validation/blog-post";
 import fs from "fs";
+import axios from "axios";
 
 
    
@@ -169,6 +170,8 @@ export const updateBlogPost: RequestHandler<UpdateBlogPostParams, unknown, BlogP
             postToEdit.featuredImageUrl = env.SERVER_URL + featuredImageDestinationPath + "?lastupdated" + Date.now();
         }
         await postToEdit.save();
+
+        await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${slug}?secret=${env.POST_REVALIDATION_KEY}`);
         res.sendStatus(200);
     }catch(error){
         next(error); 
@@ -197,6 +200,8 @@ export const deleteBlogPost: RequestHandler<DeleteBlogPostParams,unknown,unknown
 
         }
         await postToDelete.deleteOne();
+        await axios.get(env.WEBSITE_URL + `/api/revalidate-post/${postToDelete.slug}?secret=${env.POST_REVALIDATION_KEY}`);
+
         res.sendStatus(204);
 
     }catch(error){

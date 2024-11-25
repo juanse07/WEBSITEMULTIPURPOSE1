@@ -8,6 +8,7 @@ const env = cleanEnv(process.env, {
     WEBSITE_URL: str(),
     SERVER_URL: str(),
     SESSION_SECRET: str(),
+    POST_REVALIDATION_KEY: str(),
     
 });
 

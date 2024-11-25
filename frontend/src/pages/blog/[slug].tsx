@@ -11,6 +11,8 @@ import { NotFoundError } from "@/network/api/http-errors";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import AuthorizedContentGuard from "@/components/auth/AuthorizedContentGuard";
 import { FiEdit } from "react-icons/fi";
+import useSWR from 'swr';
+import { use } from "react";
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -31,7 +33,7 @@ try {
     const post = await BlogApi.getBlogPostBySlug(slug);
     return {
         props: {
-            post
+            fallbackPost: post,
         }
     };
     
@@ -50,11 +52,23 @@ try {
 
 
 interface BlogPostPageProps {
-    post:BlogPost,
+    fallbackPost:BlogPost,
 }
 
-export default function BlogPostPage({ post:{_id, slug, title, summary, body, featuredImageUrl,author, createdAt, updatedAt} }: BlogPostPageProps) {
+export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
     const {user} = useAuthenticatedUser();
+    const {data:blogPost} = useSWR(fallbackPost.slug, BlogApi.getBlogPostBySlug,{revalidateOnFocus: false} );
+    const{
+        slug,
+        title,
+        summary,
+        body,
+        featuredImageUrl,
+        author,
+        createdAt,
+        updatedAt,
+    }= blogPost || fallbackPost;
+
     const createdupdatedText = updatedAt > createdAt 
   ? <> updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time >
   </>: <time dateTime={createdAt}>{formatDate(createdAt)}</time >;

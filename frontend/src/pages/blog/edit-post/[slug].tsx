@@ -75,14 +75,13 @@ export default function EditBlogPostPage({post}: EditBlogPostPageProps) {
     })
 
     async function onSubmit({title, slug, summary, featuredImage, body}: EditPostFormData){
-        alert(JSON.stringify({title, slug, summary, featuredImage:featuredImage?.item(0), body}));
+      
         try {
             
             await BlogApi.updateBlogPost(post._id, {title, slug, summary, featuredImage:featuredImage?.item(0) || undefined, body});
         
             await router.push("/blog/" + slug);
-            alert("Post updated successfully");
-
+        
         } catch (error) {
             console.error(error);
             alert("Error updating post");

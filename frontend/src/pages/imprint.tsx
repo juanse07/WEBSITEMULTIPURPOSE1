@@ -9,3 +9,4 @@ export default function ImprintPage(){
             <p>Email:getaservice@handyjuan.com</p>
         </div>
     );
+}
