@@ -1,16 +1,21 @@
-import { Button, Form } from "react-bootstrap";
+import { Button, Form, Spinner } from "react-bootstrap";
 import {useForm} from "react-hook-form";
 import * as BlogApi from "@/network/api/blog";
 import Head from 'next/head';
 import FormInputField from "@/components/form/FormInputField";
 import MarkDownEditor from "@/components/form/MarkDownEditor";
 import { generateSlug } from "@/utils/utils";
-import { set } from "nprogress";
+
 import LoadingButton from "@/components/LoadingButton";
 import { useRouter } from "next/router";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { requiredFileSchema, requiredStringschema, slugSchema } from "@/utils/validation";
+
+import AuthGuard from "@/components/auth/AuthGuard";
+import { useUnsavedChangesWarning } from "@/hooks/useUnsavedChangesWarning";
+
+
 
 const validationSchema = yup.object({
     title: requiredStringschema,
@@ -23,10 +28,11 @@ type CreatePostFormData = yup.InferType<typeof validationSchema>;
 
 
 export default function createPostPage(){
+   
 
     const router = useRouter();
 
-    const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting}} =useForm<CreatePostFormData>({
+    const {register, handleSubmit,setValue,getValues,watch, formState:{errors,isSubmitting,isDirty}} =useForm<CreatePostFormData>({
         resolver: yupResolver(validationSchema),
 });
     
@@ -36,7 +42,7 @@ export default function createPostPage(){
         try {
             
             await BlogApi.createBlogPost({title, slug, summary, featuredImage:featuredImage[0], body});
-            // await router.push("/blog"+ slug);
+            
             await router.push("/blog/" + slug);
             alert("Post created successfully");
 
@@ -51,7 +57,10 @@ export default function createPostPage(){
         const slug= generateSlug(getValues("title"));
         setValue("slug", slug,{shouldValidate: true});
     }
+  useUnsavedChangesWarning(isDirty && !isSubmitting);
+   
     return(
+        <AuthGuard>
         
         <div>
             <Head>
@@ -111,5 +120,6 @@ export default function createPostPage(){
         
                
         </div>
+        </AuthGuard>
     )
 };

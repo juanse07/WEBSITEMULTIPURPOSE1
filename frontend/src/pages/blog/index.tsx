@@ -1,3 +1,4 @@
+import AuthGuard from '@/components/auth/AuthGuard'
 import BlogPostEntry from '@/components/BlogPostEntry'
 import BlogPostsGrid from '@/components/BlogPostsGrid'
 import PaginationBar from '@/components/PaginationBar'
@@ -47,6 +48,7 @@ interface BlogPageProps {
 export default function BlogPage({data: {blogPosts, page, totalPages}}: BlogPageProps){
     const router = useRouter();
     return(
+        <AuthGuard>
         <>
         <Head>
         <title>HandyJuan Official website - about us</title>
@@ -73,5 +75,6 @@ export default function BlogPage({data: {blogPosts, page, totalPages}}: BlogPage
         </div>
 
         </> 
+        </AuthGuard>
     );
 }

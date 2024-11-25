@@ -18,8 +18,8 @@ export default function NavBar() {
     const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser();
     const router = useRouter();
     return (
-        <Navbar expand="md" collapseOnSelect variant="dark" bg="body" sticky="top">
-            <Navbar.Brand as={Link} href='/' className='d-flex gap-1'>
+        <Navbar expand="md" collapseOnSelect variant="dark" bg="body" sticky="top" >
+            <Navbar.Brand as={Link} href='/' className='d-flex align-items-center gap-1'>
             <Image src={logo} alt="technician (3)" width={30} height={30}/> 
             <span className={styles.brandText}>
                 HandyJuan
@@ -80,9 +80,9 @@ function LoggedIniew( {user}: LoggedIniewProps) {
               className='rounded-circle'
               />
        }> {user.username &&
-            <NavDropdown.Item as={Link} href='/account/profile'>Profile</NavDropdown.Item>}
-            <NavDropdown.Item as={Link} href='/account/orders'>Orders</NavDropdown.Item>
-            <NavDropdown.Item as={Link} href='/account/settings'>Settings</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href={`/users/${user.username}`}>Profile</NavDropdown.Item>}
+            <NavDropdown.Item as={Link} href='/users/orders'>Orders</NavDropdown.Item>
+            <NavDropdown.Item as={Link} href='/users/settings'>Settings</NavDropdown.Item>
             <NavDropdown.Divider/>
             <NavDropdown.Item onClick={handleLogout
             }>Log Out</NavDropdown.Item>

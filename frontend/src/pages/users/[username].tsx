@@ -3,7 +3,7 @@ import { GetServerSideProps } from 'next';
 import * as UserApi from '@/network/api/user';
 import * as BlogApi from '@/network/api/blog';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import Head from 'next/head';
 import { Col, Form, Row, Spinner } from 'react-bootstrap';
@@ -19,6 +19,11 @@ import useSWR from 'swr';
 import { NotFoundError } from "@/network/api/http-errors";
 import BlogPostsGrid from '@/components/BlogPostsGrid'
 import PaginationBar from '@/components/PaginationBar';
+import AuthGuard from '@/components/auth/AuthGuard';
+import nProgress, { set } from "nprogress";
+import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
+import AuthorizedContentGuard from '@/components/auth/AuthorizedContentGuard';
+
 
 
 export const getServerSideProps: GetServerSideProps<UserProfilePageProps> = async ({ params }) => {
@@ -147,7 +152,7 @@ interface UpdateUserProfileSectionProps {
 
 
 function UpdateUserProfileSection({onUserUpdated} : UpdateUserProfileSectionProps) {
-    const{register, handleSubmit, formState: {isSubmitting }}=useForm<UpdateUserProfileFormData>(); 
+    const{register, handleSubmit, formState: {isSubmitting,isDirty }}=useForm<UpdateUserProfileFormData>(); 
     async function onSubmit({displayName,about,profilePic}: UpdateUserProfileFormData){
         console.log(displayName, about, profilePic);
         if (!displayName && !about && (!profilePic || profilePic.length===0)) return;
@@ -161,6 +166,7 @@ function UpdateUserProfileSection({onUserUpdated} : UpdateUserProfileSectionProp
             alert(error);
         }
     }
+    useUnsavedChangesWarning(isDirty && !isSubmitting);
     return (
         <div>
             <h2>Update Profile</h2>
@@ -193,6 +199,8 @@ function UpdateUserProfileSection({onUserUpdated} : UpdateUserProfileSectionProp
 }
 interface UserBlogPostSectionProps {
     user: User,
+   
+
  
 
 }
@@ -209,6 +217,9 @@ function UserBlogPostSection({ user }:UserBlogPostSectionProps) {
     
     
     return (
+  
+       
+      
         <div>
             <h2>Blog Posts</h2>
             {blogPosts.length > 0 && <BlogPostsGrid posts={blogPosts}/>}
@@ -225,8 +236,9 @@ function UserBlogPostSection({ user }:UserBlogPostSectionProps) {
                
             
         </div>
-     
-
         
+        
+
+        ////needs to work on this part the spinner keeps loading endlessly when logout
     );
 }

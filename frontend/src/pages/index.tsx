@@ -14,14 +14,8 @@ export default function Home() {
       <div>
         
      Welcome to HandyJuan services Im here to assist you with your home improvement needs.
-       <PaginationBar 
-       pageCount={40}
-       currentPage={17}
-       onPageItemClick={()=>{}}
-       >
-
-
-       </PaginationBar>
+      <br/>
+   
       </div>
     
   )

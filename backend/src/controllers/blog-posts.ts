@@ -7,7 +7,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import env from "../env";
 import createHttpError from "http-errors";
-import { BlogPostBody, GetBlogPostQuery } from "../validation/blog-post";
+import { BlogPostBody, DeleteBlogPostParams, GetBlogPostQuery, UpdateBlogPostParams } from "../validation/blog-post";
+import fs from "fs";
 
 
    
@@ -129,5 +130,76 @@ console.log('Featured Image URL:', newBlogPost.featuredImageUrl); // Check if th
         console.log(error);
         next(error); 
   
+    }
+}
+
+export const updateBlogPost: RequestHandler<UpdateBlogPostParams, unknown, BlogPostBody, unknown> = async(req, res, next) => {
+    const {blogPostId} = req.params;
+    const{slug,title,summary,body} = req.body;
+    const featuredImage = req.file;
+    const authenticatedUser = req.user;
+    try{
+        assertIsDefined(authenticatedUser);
+
+        const existingSlug = await BlogPostModel.findOne({slug}).exec();
+        if(existingSlug && !existingSlug._id.equals(blogPostId)){
+            throw createHttpError(400, "Slug already exists");
+        }
+
+        const postToEdit = await BlogPostModel.findById(blogPostId).exec();
+
+        if(!postToEdit){
+            throw createHttpError(404, "Blog post not found");
+        }
+        if(!postToEdit.author.equals(authenticatedUser._id)){
+            throw createHttpError(401, "You are not allowed to edit this blog post");
+        }
+        
+        postToEdit.slug = slug;
+        postToEdit.title = title;
+        postToEdit.summary = summary;
+        postToEdit.body = body;
+
+        if(featuredImage){
+           
+            const featuredImageDestinationPath = "/uploads/featured-images/" + blogPostId + ".png";
+            await sharp(featuredImage.buffer)
+            .resize(700, 450)
+            .toFile("./" + featuredImageDestinationPath);
+            postToEdit.featuredImageUrl = env.SERVER_URL + featuredImageDestinationPath + "?lastupdated" + Date.now();
+        }
+        await postToEdit.save();
+        res.sendStatus(200);
+    }catch(error){
+        next(error); 
+
+    }
+
+}
+export const deleteBlogPost: RequestHandler<DeleteBlogPostParams,unknown,unknown,unknown> = async(req, res, next) => {
+    const {blogPostId} = req.params;
+     const authenticatedUser = req.user;
+    try{
+        assertIsDefined(authenticatedUser);
+        const postToDelete = await BlogPostModel.findById(blogPostId).exec();
+
+        if(!postToDelete){
+            throw createHttpError(404, "Blog post not found");
+        }
+        if(!postToDelete.author.equals(authenticatedUser._id)){
+            throw createHttpError(401, "You are not allowed to edit this blog post");
+        }
+
+        if(postToDelete.featuredImageUrl.startsWith(env.SERVER_URL)){
+            const imagePath = postToDelete.featuredImageUrl.split(env.SERVER_URL)[1].split("?")[0];
+            await fs.unlinkSync("." + imagePath);
+           
+
+        }
+        await postToDelete.deleteOne();
+        res.sendStatus(204);
+
+    }catch(error){
+        next(error);
     }
 }

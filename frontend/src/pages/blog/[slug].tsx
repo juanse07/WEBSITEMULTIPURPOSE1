@@ -8,6 +8,9 @@ import Link from "next/link";
 import { formatDate } from "@/utils/utils";
 import Image from 'next/image';
 import { NotFoundError } from "@/network/api/http-errors";
+import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
+import AuthorizedContentGuard from "@/components/auth/AuthorizedContentGuard";
+import { FiEdit } from "react-icons/fi";
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -50,8 +53,9 @@ interface BlogPostPageProps {
     post:BlogPost,
 }
 
-export default function BlogPostPage({ post:{_id, slug, title, summary, body, featuredImageUrl, createdAt, updatedAt} }: BlogPostPageProps) {
-  const createdupdatedText = updatedAt > createdAt 
+export default function BlogPostPage({ post:{_id, slug, title, summary, body, featuredImageUrl,author, createdAt, updatedAt} }: BlogPostPageProps) {
+    const {user} = useAuthenticatedUser();
+    const createdupdatedText = updatedAt > createdAt 
   ? <> updated <time dateTime={updatedAt}>{formatDate(updatedAt)}</time >
   </>: <time dateTime={createdAt}>{formatDate(createdAt)}</time >;
 
@@ -63,6 +67,15 @@ console.log('Attempting to load image from:', featuredImageUrl)
     <title>{`${title}- HandyJuan Official Website`}</title>
     <meta name="description" content= {summary} />
     </Head>
+   <div className={styles.container}>
+    {user?._id === author._id && 
+    <Link href={`/blog/edit-post/${slug}`}
+    className="btn btn-outline-primary d-inline-flex align-items-center gap-1 mb-2">
+        <FiEdit className="mr-2"/>
+    Edit Post
+    </Link>
+    }
+   </div>
     <div className={styles.container}>
         <div className="text-center mb-4">
             <Link href="/blog"> Blog Home </Link>
