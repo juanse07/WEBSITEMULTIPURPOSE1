@@ -3,7 +3,7 @@ import passport from "passport";
 import * as userController from "../controllers/user";
 import requiresAuth from "../middlewares/requiresAuth";
 import validateRequestSchema from "../middlewares/validateRequestSchema";
-import { requestVerificationcODESchema, signUpSchema } from "../validation/users";
+import { requestVerificationcODESchema, resetPasswordSchema, signUpSchema } from "../validation/users";
 import { profilePicUpload } from "../middlewares/imageUpload";
 import { updateUserSchema } from "../validation/users";
 import setSessionReturnTo from "../middlewares/setSessionReturnTo";
@@ -15,6 +15,8 @@ router.get("/me",requiresAuth, userController.getAuthenticatedUser);
 router.get("/profile/:username", userController.getUserbyUsername);
 router.post("/signup",validateRequestSchema(signUpSchema), userController.signUp);
 router.post("/verification-code", validateRequestSchema(requestVerificationcODESchema), userController.requestEmailverificationCode);
+router.post("/reset-password-code", validateRequestSchema(requestVerificationcODESchema), userController.requestResetPasswordCode);
+router.post("/reset-password/verify", validateRequestSchema(resetPasswordSchema), userController.resetPassword);
 router.post("/login", passport.authenticate("local"), (req, res) => 
     res.status(200).json(req.user));
 router.get("/login/google", setSessionReturnTo, passport.authenticate("google"));

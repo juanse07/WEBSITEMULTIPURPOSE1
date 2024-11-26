@@ -32,7 +32,7 @@ export async function sendVerificationCode(toEmail: string, verificationCode: st
         from: "juansegz07s@gmail.com",
         to: toEmail,
         subject: "Please verify your email",
-        html: `This is your verification code. It will expire in 12 hours. <strong>${verificationCode}</strong>`,
+        html: `<p>This is your verification code. It will expire in 12 hours. <strong>${verificationCode}</strong></p>`,
       });
       console.log('Email sent successfully:', info.response);
       return info;
@@ -40,4 +40,25 @@ export async function sendVerificationCode(toEmail: string, verificationCode: st
       console.error('Error sending email:', error);
       throw error;
     }
+  }
+  export async function sendPasswordResetEmail(toEmail: string, verificationCode: string) {
+    try {
+      const info = await transporter.sendMail({
+        from: "juansegz07s@gmail.com",
+        to: toEmail,
+        subject: "Reset your password",
+        html: `<p>A password reset request has been sent for thi account.
+        use this verification code to reset your password.
+        It will expire in 10 minute.</p> 
+        <p><strong>${verificationCode}</strong></p>
+        if You didnt request a password reset, you can ignore this email.`,
+        
+      });
+      console.log('Email sent successfully:', info.response);
+      return info;
+    } catch (error) {
+      console.error('Error sending email:', error);
+      throw error;
+    }
+
   }

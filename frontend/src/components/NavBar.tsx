@@ -13,6 +13,7 @@ import { User } from '@/models/user';
 import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
 
 import * as UsersApi from '@/network/api/user';
+import ResetPasswordModal from './auth/ResetPasswordModal';
 
 export default function NavBar() {
     const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser();
@@ -94,6 +95,7 @@ function LoggedIniew( {user}: LoggedIniewProps) {
 function LoggedOutiew (){
     const [showLoginModal, setShowLoginModal] = useState(false);
     const [showSignUpModal, setShowSignUpModal] = useState(false);
+    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
     
     return (
        <>
@@ -115,7 +117,10 @@ function LoggedOutiew (){
         showLoginModal && <LogInModal 
         onDismiss={() => setShowLoginModal(false)}
         onSignUpInsteadClicked= {()=>{ setShowLoginModal(false); setShowSignUpModal(true);}}
-        onForgotPasswordClicked= {()=>{}}
+        onForgotPasswordClicked= {()=>{
+            setShowLoginModal(false);
+            setShowForgotPasswordModal(true);
+        }}
         
        />
        
@@ -125,6 +130,18 @@ function LoggedOutiew (){
             onDismiss={() => setShowSignUpModal(false)}
             onLoginInsteadClicked= {()=>{ setShowSignUpModal(false); setShowLoginModal(true);}}
             />
+        }
+        {
+            showForgotPasswordModal &&
+            <ResetPasswordModal
+            onDismiss={()=> setShowForgotPasswordModal(false)}
+            onSignUpClicked={()=>{ setShowForgotPasswordModal(false);
+            setShowSignUpModal(true)
+                 }
+            }
+            />
+
+         
         }
         </div>
        </>
