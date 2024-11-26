@@ -14,12 +14,16 @@ interface SignUpalues{
     username: string;
     email: string;
     password: string;
+    verificationCode: string;
 }
 
 export async function signup(credentials: SignUpalues){
     const response = await api.post<User>("/users/signup", credentials);
     return response.data;
     
+}
+export async function requestEmailVerificationCode(email: string){
+    await api.post("/users/verification-code", { email });
 }
 
 interface LoginValues{

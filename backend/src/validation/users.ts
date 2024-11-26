@@ -20,6 +20,7 @@ const passwordSchema = yup.string()
         username: usernameSchema.required(),
         email: emailSchema.required(),
         password: passwordSchema.required(),
+        verificationCode: yup.string().required(),
 
         }),
 
@@ -42,3 +43,11 @@ export const updateUserSchema = yup.object({
 
 });
 export type UpdateUserBody = yup.InferType<typeof updateUserSchema>['body'];
+
+export const requestVerificationcODESchema = yup.object({
+    body: yup.object({
+        email: emailSchema.required(),
+    }),
+});
+
+export type RequestVerificationCodeBody = yup.InferType<typeof requestVerificationcODESchema>['body'];

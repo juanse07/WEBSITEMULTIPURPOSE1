@@ -11,8 +11,10 @@ import { useState } from "react";
 import { BadRequestError, conflictError } from "@/network/api/http-errors";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
-import { passwordSchema, usernameSchema,emailSchema } from "@/utils/validation";
+import { passwordSchema, usernameSchema,emailSchema, requiredStringschema } from "@/utils/validation";
 import SocialSignInSection from "./SocialSignInSection";
+import { set } from "nprogress";
+import useCountdown from "@/hooks/useCountdown";
 
 
 const validationSchema = yup.object({
@@ -20,6 +22,7 @@ const validationSchema = yup.object({
     username: usernameSchema.required("Username is required"),
     email: emailSchema.required("Email is required"),
     password: passwordSchema.required("Password is required"),
+    verificationCode: requiredStringschema,
 
 });
 
@@ -36,15 +39,22 @@ interface SignUpModalProps {
 export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpModalProps) {
 
     const { mutateUser} = useAuthenticatedUser();
-    const [errorText, setErrorText] = useState<string | null>(null);
+   
+    const [verificationCodeRequestPending, setVerificationCodeRequestPending] = useState(false);
+    const [showVerificationCodeSenttext, setShowVerificationCodeSent] = useState(false);
+    const {timeLeft,start} = useCountdown();
     
-    const {register, handleSubmit, formState: {errors, isSubmitting}} = useForm<SignUpFormData>({
+
+    const [errorText, setErrorText] = useState<string | null>(null);
+   
+    const {register, handleSubmit, getValues,trigger, formState: {errors, isSubmitting}} = useForm<SignUpFormData>({
         resolver:yupResolver(validationSchema)
     });
     
     async function onSubmit(credentials: SignUpFormData){
         try{
             setErrorText(null);
+            setShowVerificationCodeSent(false);
     const newUser = await UsersApi.signup(credentials);
    mutateUser(newUser);
    onDismiss();
@@ -59,6 +69,32 @@ export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpMo
     }
 } 
 
+async function handleVerificationCodeRequest(){
+    const validEmailInput = await trigger("email");
+    if(!validEmailInput)return;
+        const emailInput = getValues("email");
+        setErrorText(null);
+        setShowVerificationCodeSent(false);
+        setVerificationCodeRequestPending(true);
+        try{
+            await UsersApi.requestEmailVerificationCode(emailInput);
+            setShowVerificationCodeSent(true);
+            start(60);
+            
+        }catch(error){
+            if(error instanceof conflictError || error instanceof BadRequestError){
+                setErrorText(error.message);
+            }else{
+                console.log(error);
+                alert(error);
+            }
+        }finally{
+            setVerificationCodeRequestPending(false);
+           
+        }
+    
+
+}
     return (
         <Modal show  onHide={onDismiss} centered>
             <Modal.Header closeButton>
@@ -67,6 +103,8 @@ export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpMo
             <Modal.Body>
               {errorText && <Alert 
                 variant="danger">{errorText}</Alert>}
+                {showVerificationCodeSenttext && <Alert
+                variant="warning">Verification code sent. Please check your email.</Alert>}
                 <Form onSubmit={handleSubmit(onSubmit)} noValidate>
                 <FormInputField
                 register={register("username", {required: "Username is required"})}
@@ -89,6 +127,22 @@ export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpMo
                label= "Password"
                placeholder="Enter your password"
                error={errors.password}
+               />
+               <FormInputField
+               register={register("verificationCode")}
+               label="Verification Code"
+                placeholder="Enter the verification code sent to your email"
+                type="number"
+                error={errors.verificationCode}
+                inputGroupElement={<Button
+                id="button-send-verification-code"
+                disabled={verificationCodeRequestPending || timeLeft > 0}
+                onClick={handleVerificationCodeRequest}>
+              
+                    Send Code
+                    {timeLeft > 0 && `(${timeLeft})`}
+                </Button>
+                }
                />
                <LoadingButton
                type="submit"
