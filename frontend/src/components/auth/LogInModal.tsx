@@ -11,6 +11,7 @@ import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { mutate } from "swr";
 import * as yup from "yup";
 import { requiredStringschema } from "@/utils/validation";
+import SocialSignInSection from "./SocialSignInSection";
 
 const validationschema = yup.object().shape({
     username: requiredStringschema,
@@ -82,6 +83,10 @@ export default function LogInModal({onDismiss, onSignUpInsteadClicked, onForgotP
                </LoadingButton>
               
                 </Form>
+
+                <hr/>
+                <p>Or Log In with</p>
+                <SocialSignInSection/>
 
 
             </Modal.Body>

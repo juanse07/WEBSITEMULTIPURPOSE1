@@ -14,11 +14,12 @@ import { Sign } from 'crypto';
 import SignUpModal from '@/components/auth/SignUpModal';
 import LogInModal from '@/components/auth/LogInModal';
 import { on } from 'events';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import {User} from '@/models/user';
 import * as UsersApi from '@/network/api/user';
 import useSwr from 'swr';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
+import { useRouter } from 'next/router';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -45,6 +46,7 @@ export default function App({ Component, pageProps }: AppProps) {
   // }, []);
 
  // const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser(); /// removed because of the use of the useSWR hook
+useOnboardingRedirect();
 return(
 <>
     <Head>
@@ -73,17 +75,22 @@ return(
           </Container>
          
        </main>
-       {/* <Footer/>
-       <LogInModal
-       onDismiss={()=> { }}
-       onSignUpInsteadClicked={()=>{ }}
-      onForgotPasswordClicked={()=>{ }}
-    
-       /> */}
+       {/* <Footer/> */}
+      
      </div>
      </SSRProvider>
 </>
 
    );
  
+  }
+
+  function useOnboardingRedirect() {
+    const {user}= useAuthenticatedUser();
+    const router = useRouter();
+    useEffect(() => {
+      if(user && !user.username && router.pathname !== '/onboarding'){
+        router.push('/onboarding?returnTo=' + router.asPath);
+      }
+    }, [user, router]);
   }

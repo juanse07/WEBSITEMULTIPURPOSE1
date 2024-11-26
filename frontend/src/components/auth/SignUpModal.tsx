@@ -12,6 +12,7 @@ import { BadRequestError, conflictError } from "@/network/api/http-errors";
 import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup';
 import { passwordSchema, usernameSchema,emailSchema } from "@/utils/validation";
+import SocialSignInSection from "./SocialSignInSection";
 
 
 const validationSchema = yup.object({
@@ -98,6 +99,10 @@ export default function SignUpModal({onDismiss, onLoginInsteadClicked}: SignUpMo
                 
 
                 </Form>
+                <hr/>
+                <p>Or sign up with</p>
+                <SocialSignInSection/>
+                
                 
             </Modal.Body>
             <Modal.Footer>

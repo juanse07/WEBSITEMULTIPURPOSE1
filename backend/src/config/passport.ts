@@ -1,8 +1,12 @@
-import passport from "passport";
+import passport, { Profile } from "passport";
 import { Strategy as LocalStrategy } from 'passport-local';
 import bcrypt from 'bcrypt';
 import UserModel from '../models/user';
 import mongoose, { mongo } from "mongoose";
+import {Strategy as GoogleStrategy} from "passport-google-oauth20";
+import { Strategy as GitHubStrategy } from "passport-github2";
+import {VerifyCallback} from "passport-oauth2"
+import env from "../env";
 
 passport.serializeUser((user: any, cb) => {
 
@@ -36,5 +40,56 @@ passport.use(new LocalStrategy(async (username, password, cb) => {
     } catch (error) {
             cb(error);
         }
+
+}));
+
+passport.use(new GoogleStrategy({
+    clientID: env.GOOGLE_CLIENT_ID!,
+    clientSecret: env.GOOGLE_CLIENT_SECRET!,
+    callbackURL: env.SERVER_URL + "/users/oauth2/redirect/google",
+    scope:["profile"],
+}, async (accessToken, refreshToken, profile, cb)=>{
+    try {
+        let user = await UserModel.findOne({googleId: profile.id}).exec();
+        if(!user){
+            user = await UserModel.create({
+                googleId: profile.id,
+                username: profile.displayName,
+                email: profile.emails?.[0].value,
+            });
+        }
+        cb(null, user);
+    } catch (error) {
+        if(error instanceof Error){
+            cb(error);
+        
+        }else{
+        throw error;
+        }
+    }
+
+})); 
+passport.use(new GitHubStrategy({
+    clientID: env.GITHUB_CLIENT_ID!,
+    clientSecret: env.GITHUB_CLIENT_SECRET!,
+    callbackURL: "/users/oauth2/redirect/github",
+}, async (accessToken: string, refreshToken: string, profile: Profile, cb:VerifyCallback)=>{
+    try {
+        let user = await UserModel.findOne({githubId: profile.id}).exec();
+        if(!user){
+            user = await UserModel.create({
+                githubId: profile.id,
+                
+            });
+        }
+        cb(null, user);
+    } catch (error) {
+        if(error instanceof Error){
+            cb(error);
+        
+        }else{
+        throw error;
+        }
+    }
 
 }));
