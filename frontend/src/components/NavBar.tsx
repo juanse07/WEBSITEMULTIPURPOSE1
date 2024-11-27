@@ -6,7 +6,7 @@ import logo from "@/assets/images/technician (3).png";
 import Image from 'next/image';
 import styles from '@/styles/NavBar.module.css';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import LogInModal from './auth/LogInModal';
 import SignUpModal from './auth/SignUpModal';
 import { User } from '@/models/user';
@@ -14,6 +14,7 @@ import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
 
 import * as UsersApi from '@/network/api/user';
 import ResetPasswordModal from './auth/ResetPasswordModal';
+import { AuthModalsContext } from './auth/AuthModalsProvider';
 
 export default function NavBar() {
     const {user, userloading, userLoadingError, mutateUser} =useAuthenticatedUser();
@@ -93,58 +94,29 @@ function LoggedIniew( {user}: LoggedIniewProps) {
  }
 
 function LoggedOutiew (){
-    const [showLoginModal, setShowLoginModal] = useState(false);
-    const [showSignUpModal, setShowSignUpModal] = useState(false);
-    const [showForgotPasswordModal, setShowForgotPasswordModal] = useState(false);
+    const authModalsContext = useContext(AuthModalsContext);
+ 
     
     return (
-       <>
-       <Nav className='ms-auto'></Nav>
+       
+       <Nav className='ms-auto'>
        <div className='d-flex justify-content-center justify-content-md-start'>
        <Button
        variant='outline-primary'
        className='ms-md-2 mt-2 mt-md-0 ms-3'
-       onClick={()=> setShowLoginModal(true)}>
+       onClick={()=> authModalsContext.showLoginModal()}>
         Log In
        </Button>
        <Button 
-       onClick={()=> setShowSignUpModal(true)}
+       onClick={()=> authModalsContext.showSignUpModal()}
        className='ms-md-2 mt-2 mt-md-0 ms-3 me-3'>
               Sign Up
        </Button>
        
-       {
-        showLoginModal && <LogInModal 
-        onDismiss={() => setShowLoginModal(false)}
-        onSignUpInsteadClicked= {()=>{ setShowLoginModal(false); setShowSignUpModal(true);}}
-        onForgotPasswordClicked= {()=>{
-            setShowLoginModal(false);
-            setShowForgotPasswordModal(true);
-        }}
-        
-       />
        
-        }
-        {
-            showSignUpModal && <SignUpModal 
-            onDismiss={() => setShowSignUpModal(false)}
-            onLoginInsteadClicked= {()=>{ setShowSignUpModal(false); setShowLoginModal(true);}}
-            />
-        }
-        {
-            showForgotPasswordModal &&
-            <ResetPasswordModal
-            onDismiss={()=> setShowForgotPasswordModal(false)}
-            onSignUpClicked={()=>{ setShowForgotPasswordModal(false);
-            setShowSignUpModal(true)
-                 }
-            }
-            />
-
-         
-        }
         </div>
-       </>
+        </Nav>
+       
     );
 }
 

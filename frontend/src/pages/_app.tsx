@@ -20,6 +20,7 @@ import * as UsersApi from '@/network/api/user';
 import useSwr from 'swr';
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import { useRouter } from 'next/router';
+import AuthModalsProvider from '@/components/auth/AuthModalsProvider';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -56,6 +57,7 @@ return(
         <link rel="icon" href="/favicon.ico" />     
      </Head>
       <SSRProvider>
+        <AuthModalsProvider>
       <div className={inter.className}>
 
         <NextNProgress
@@ -78,6 +80,7 @@ return(
        {/* <Footer/> */}
       
      </div>
+     </AuthModalsProvider>
      </SSRProvider>
 </>
 
