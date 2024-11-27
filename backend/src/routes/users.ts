@@ -8,16 +8,17 @@ import { profilePicUpload } from "../middlewares/imageUpload";
 import { updateUserSchema } from "../validation/users";
 import setSessionReturnTo from "../middlewares/setSessionReturnTo";
 import env from "../env";
+import { loginnRateLimit, passwordResetRateLimit, requestVerificationodeRateLimit } from "../middlewares/rate-limit";
 
 
 const router = express.Router();
 router.get("/me",requiresAuth, userController.getAuthenticatedUser);
 router.get("/profile/:username", userController.getUserbyUsername);
 router.post("/signup",validateRequestSchema(signUpSchema), userController.signUp);
-router.post("/verification-code", validateRequestSchema(requestVerificationcODESchema), userController.requestEmailverificationCode);
-router.post("/reset-password-code", validateRequestSchema(requestVerificationcODESchema), userController.requestResetPasswordCode);
+router.post("/verification-code",requestVerificationodeRateLimit, validateRequestSchema(requestVerificationcODESchema), userController.requestEmailverificationCode);
+router.post("/reset-password-code",passwordResetRateLimit, validateRequestSchema(requestVerificationcODESchema), userController.requestResetPasswordCode);
 router.post("/reset-password/verify", validateRequestSchema(resetPasswordSchema), userController.resetPassword);
-router.post("/login", passport.authenticate("local"), (req, res) => 
+router.post("/login",loginnRateLimit, passport.authenticate("local"), (req, res) => 
     res.status(200).json(req.user));
 router.get("/login/google", setSessionReturnTo, passport.authenticate("google"));
 router.get("/oauth2/redirect/google",passport.authenticate("google",{

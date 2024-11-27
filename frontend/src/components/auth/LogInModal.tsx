@@ -6,7 +6,7 @@ import FormInputField from "../form/FormInputField";
 import PasswordInputField from "../form/PasswordInputField";
 import LoadingButton from "../LoadingButton";
 import { useState } from "react";
-import { UnauthorizedError } from "@/network/api/http-errors";
+import { ToomanyrequestError, UnauthorizedError } from "@/network/api/http-errors";
 import useAuthenticatedUser from "@/hooks/useAuthenticatedUser";
 import { mutate } from "swr";
 import * as yup from "yup";
@@ -41,6 +41,10 @@ export default function LogInModal({onDismiss, onSignUpInsteadClicked, onForgotP
             }catch(error){
             if (error instanceof UnauthorizedError){
                 setErrorText("Invalid username or password");
+            }else if(error instanceof ToomanyrequestError){
+                setErrorText("Too many requests, please try again later");
+
+
             }else{
 
             console.log(error);
