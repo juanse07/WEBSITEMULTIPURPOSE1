@@ -1,5 +1,6 @@
 import { RequestHandler } from "express";
 import BlogPostModel from "../models/Blogposts"
+
 import assertIsDefined from "../utils/assertIsDefined";
 import mongoose from "mongoose";
 import sharp from "sharp";
@@ -10,6 +11,7 @@ import createHttpError from "http-errors";
 import { BlogPostBody, DeleteBlogPostParams, GetBlogPostQuery, UpdateBlogPostParams } from "../validation/blog-post";
 import fs from "fs";
 import axios from "axios";
+import { CreateCommentBody, CreateCommentParams } from "../validation/comments";
 
 
    
@@ -208,3 +210,4 @@ export const deleteBlogPost: RequestHandler<DeleteBlogPostParams,unknown,unknown
         next(error);
     }
 }
+

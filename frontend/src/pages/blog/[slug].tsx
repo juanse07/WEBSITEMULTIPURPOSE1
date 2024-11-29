@@ -13,6 +13,7 @@ import AuthorizedContentGuard from "@/components/auth/AuthorizedContentGuard";
 import { FiEdit } from "react-icons/fi";
 import useSWR from 'swr';
 import { use } from "react";
+import BlogCommentSection from "@/components/comments/BlogCommentsSection";
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -59,6 +60,7 @@ export default function BlogPostPage({ fallbackPost }: BlogPostPageProps) {
     const {user} = useAuthenticatedUser();
     const {data:blogPost} = useSWR(fallbackPost.slug, BlogApi.getBlogPostBySlug,{revalidateOnFocus: false} );
     const{
+        _id,
         slug,
         title,
         summary,
@@ -124,7 +126,8 @@ console.log('Attempting to load image from:', featuredImageUrl)
                 {body}
             </div>
         </article>
-
+                  <hr/>
+                  <BlogCommentSection blogPostId={_id}/>
     </div>
     </>  
   );
