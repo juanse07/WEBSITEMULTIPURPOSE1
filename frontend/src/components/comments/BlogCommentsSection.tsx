@@ -5,6 +5,7 @@ import * as BlogApi from '../../network/api/blog';
 import CreateCommentBox from './CreateCommentBox';
 import Comment from './Comments';
 import { Button, Spinner } from 'react-bootstrap';
+import CommentThread from './CommentThread';
 
 interface BlogCommentSectionProps {
     blogPostId: string;
@@ -26,6 +27,7 @@ function CommentSection({blogPostId}: BlogCommentSectionProps) {
     const[commentsloading, setCommentsLoading] = useState(false);
     const[commentsloadingError, setCommentsLoadingError] = useState(false);
     const[commentsEndOfPagination, setCommentsEndOfPagination] = useState<boolean>();
+
     
     
     const loadNextCommentsPage = useCallback(async function (continueAfterId?: string) {
@@ -56,15 +58,32 @@ function CommentSection({blogPostId}: BlogCommentSectionProps) {
     const handleCommmentCreated = (newComment: CommentModel) => {
         setcomments( [newComment, ...comments]);
     };
+    function handleCommentUpdated(updatedComment: CommentModel){
+        const update = comments.map(existingComment => 
+            existingComment._id === updatedComment._id ? 
+            {...updatedComment, repliesCount: existingComment.repliesCount} : existingComment);
+           
+        setcomments(update);
+
+    }
+    function handleCommentDeleted(deletedComment: CommentModel){
+        const update = comments.filter(existingComment => existingComment._id !== deletedComment._id);
+        setcomments(update);
+    }
     return (
         <div>
-            <h2>Comments</h2>
+           
             <CreateCommentBox
             blogPostId={blogPostId}
             title= "Write a comment"
-            onCommentCreated={handleCommmentCreated}/>
+            onCommentCreated={handleCommmentCreated}
+            />
             {comments.map((comment) => (
-                <Comment key={comment._id} comment={comment} />
+                <CommentThread 
+                key={comment._id} 
+                comment={comment}
+                onCommentUpdated={handleCommentUpdated}
+                onCommentDeleted={handleCommentDeleted} />
             ))}
             <div className='mt-2 text-center'>
                 <hr/>

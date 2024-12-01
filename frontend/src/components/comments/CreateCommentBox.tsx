@@ -1,6 +1,6 @@
 import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import {Comment} from '@/models/comment';
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import * as yup from 'yup';
 import {AuthModalsContext} from '../auth/AuthModalsProvider';
 import { useForm } from 'react-hook-form';
@@ -9,6 +9,7 @@ import * as BlogApi from '@/network/api/blog';
 import { Button, Form } from 'react-bootstrap';
 import FormInputField from '../form/FormInputField';
 import LoadingButton from '../LoadingButton';
+import { set } from 'nprogress';
 
 const validationSchema = yup.object({
 
@@ -21,17 +22,21 @@ interface CreateCommentBoxProps {
    blogPostId: string,
    parentCommentId?: string,
    title: string,
-   onCommentCreated:(comment:Comment) => void;
+   onCommentCreated:(comment:Comment) => void,
+   showCancel?: boolean,
+    onCancel?: () => void,
+    defaultText?: string,
 }
 
 
 
 
-export default function CreateCommentBox({blogPostId, parentCommentId, title, onCommentCreated}: CreateCommentBoxProps) {
+export default function CreateCommentBox({blogPostId, parentCommentId, title, onCommentCreated, showCancel, onCancel,defaultText}: CreateCommentBoxProps) {
     const { user } =useAuthenticatedUser();
     const authModalContext = useContext(AuthModalsContext);
     
-    const{register, handleSubmit, formState: {isSubmitting}, reset}= useForm<CreateCommentBoxInput>({
+    const{register, handleSubmit, formState: {isSubmitting}, reset, setFocus}= useForm<CreateCommentBoxInput>({
+        defaultValues:{text: defaultText || ""},
         resolver: yupResolver(validationSchema),
         
     });
@@ -49,6 +54,12 @@ export default function CreateCommentBox({blogPostId, parentCommentId, title, on
 
         }
     }
+    useEffect(() => {
+        if (parentCommentId) {
+            setFocus("text");
+        }
+
+    }, [parentCommentId, setFocus]);
 
     if (!user) {
         return (
@@ -70,7 +81,7 @@ export default function CreateCommentBox({blogPostId, parentCommentId, title, on
                     register={register("text")}
                     as="textarea"
                     maxLength={600}
-                    placeholder='Say something'
+                    placeholder="Say something..."
                     />
                     <LoadingButton
                     type='submit'
@@ -78,6 +89,7 @@ export default function CreateCommentBox({blogPostId, parentCommentId, title, on
                     >
                         Submit
                     </LoadingButton>
+                    {showCancel && <Button onClick={onCancel} className='ms-2' variant='outline-primary'>Cancel</Button>}
                 </Form>
                     
         </div>
