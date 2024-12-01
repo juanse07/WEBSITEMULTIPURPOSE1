@@ -79,7 +79,7 @@ export default function CommentThread({comment, onCommentUpdated, onCommentDelet
             onRelpyCreated={handleReplyCreated}
             onReplyUpdated={handleRemoteReplyUpdated}
             onReplyDeleted={handleRemoteReplyDeleted}/>
-            <div className="mt-2 text-center">
+            <div className="mt-2">
                {repliesLoading && <Spinner animation="border" />}
                {repliesLoadingError && <p>Failed to load replies</p>}
                 {showLoadRepliesButton && 

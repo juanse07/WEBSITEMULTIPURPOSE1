@@ -14,6 +14,9 @@ import { FiEdit } from "react-icons/fi";
 import useSWR from 'swr';
 import { use } from "react";
 import BlogCommentSection from "@/components/comments/BlogCommentsSection";
+import MarkDown from "@/components/form/MarkDown";
+import UserProfileLink from "@/components/UserProfileLink";
+
 
 export const getStaticPaths: GetStaticPaths = async () => {
     const slugs = await BlogApi.getAllBlogPostSlugs();
@@ -101,6 +104,7 @@ console.log('Attempting to load image from:', featuredImageUrl)
             <div className="d-flex flex-column align-items-center">
                 <h1 className="text-center mb-3">{title}</h1>
                 <p className="text-center mb-3 h5">{summary}</p>
+                <p className="d-flex text-center mb-3 gap-2">By <UserProfileLink user={author}/></p>
                 <span className="text-muted">{createdupdatedText}</span>
                 <div className={styles.featuredImageWrapper}>
                 <Image
@@ -123,7 +127,7 @@ console.log('Attempting to load image from:', featuredImageUrl)
                </div>
             </div>
             <div>
-                {body}
+               <MarkDown>{body}</MarkDown> 
             </div>
         </article>
                   <hr/>

@@ -1,10 +1,10 @@
 import express from "express";
 import * as blogPostsController from "../controllers/blog-posts";
-import { featuredImageUpload } from "../middlewares/imageUpload";
+import { featuredImageUpload, inPostImageUpload } from "../middlewares/imageUpload";
 import requiresAuth from "../middlewares/requiresAuth";
 import validateRequestSchema from "../middlewares/validateRequestSchema";
-import { createBlogPostSchema, deleteBlogPostSchema, getBlogPostsSchema,updateBlogPostSchema } from "../validation/blog-post";
-import { createPostRateLimit, updatePostRateLimit } from "../middlewares/rate-limit";
+import { createBlogPostSchema, deleteBlogPostSchema, getBlogPostsSchema,updateBlogPostSchema, uploadInPostImageSchema } from "../validation/blog-post";
+import { createPostRateLimit, updatePostRateLimit, uploadImageRateLimit } from "../middlewares/rate-limit";
 import { createCommentSchema, deleteCommentsSchema, getCommentSchema,getCommentsRepliesSchema,updateCommentSchema } from "../validation/comments";
 import * as CommentsController from "../controllers/comments";
 
@@ -26,6 +26,8 @@ router.patch("/:blogPostId",requiresAuth,updatePostRateLimit, featuredImageUploa
 , blogPostsController.updateBlogPost);
 
 router.delete("/:blogPostId",requiresAuth, validateRequestSchema(deleteBlogPostSchema),blogPostsController.deleteBlogPost);
+
+router.post("/images",requiresAuth,uploadImageRateLimit,inPostImageUpload.single("inPostImage"),validateRequestSchema(uploadInPostImageSchema), blogPostsController.uploadInPostImage);
 
 router.get ("/:blogPostId/comments",validateRequestSchema(getCommentSchema), CommentsController.getCommentsForBlogPosts);
 

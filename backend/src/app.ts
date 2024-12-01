@@ -35,6 +35,7 @@ app.use(passport.authenticate("session"));
 //app.use("/uploads/featured-images", express.static("uploads/featured-images")); //this is the original
 app.use("/uploads/profile-pictures/", express.static("uploads/profile-pictures")); //this is the original
 app.use('/uploads/featured-images', express.static(uploadsPath));
+app.use("/uploads/inPost-images", express.static("uploads/inPost-images"));
 // In your Express backend
 
 //app.use('/uploads/profile-pictures', express.static(profilePicUploadPath));

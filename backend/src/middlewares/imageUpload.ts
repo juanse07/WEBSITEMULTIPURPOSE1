@@ -29,3 +29,17 @@ fileFilter: (req, file, cb) => {
 }
 
 });
+
+export const inPostImageUpload = multer({
+    limits:{
+        fileSize: 5 * 1024 * 1024, // 5MB
+    },
+    fileFilter: (req, file, cb) => {
+        if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+            cb(null, true);
+        }else{
+            cb(new Error('File type not supported'));
+        }
+    }
+    
+    });

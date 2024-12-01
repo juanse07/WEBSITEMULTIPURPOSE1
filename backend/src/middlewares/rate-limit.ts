@@ -43,3 +43,11 @@ export const updatePostRateLimit = rateLimit({
     skipSuccessfulRequests: true,
     message: "Too many posts updated, please try again later.",
 });
+export const uploadImageRateLimit = rateLimit({
+    windowMs: 60*60*1000, // 60 minutes
+    max: 25,
+    standardHeaders: true,
+    legacyHeaders: false,
+    skipSuccessfulRequests: true,
+    message: "Too many images uploaded, please try again later.",
+});

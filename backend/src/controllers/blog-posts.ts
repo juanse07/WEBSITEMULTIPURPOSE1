@@ -12,6 +12,8 @@ import { BlogPostBody, DeleteBlogPostParams, GetBlogPostQuery, UpdateBlogPostPar
 import fs from "fs";
 import axios from "axios";
 import { CreateCommentBody, CreateCommentParams } from "../validation/comments";
+import crypto from "crypto";
+
 
 
    
@@ -206,6 +208,22 @@ export const deleteBlogPost: RequestHandler<DeleteBlogPostParams,unknown,unknown
 
         res.sendStatus(204);
 
+    }catch(error){
+        next(error);
+    }
+}
+
+export const uploadInPostImage: RequestHandler = async(req, res, next) => {
+    const image = req.file;
+    try{
+        assertIsDefined(image);
+        const fileName = crypto.randomBytes(20).toString("hex");
+        const imageDestinationPath = "/uploads/inPost-images/" + fileName + path.extname(image.originalname);
+        await sharp(image.buffer)
+        .resize(1920, undefined, {withoutEnlargement: true})
+        .toFile("./" + imageDestinationPath);
+
+        res.status(201).json({imageUrl: env.SERVER_URL + imageDestinationPath});
     }catch(error){
         next(error);
     }
