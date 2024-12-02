@@ -13,7 +13,7 @@ interface LoadingButtonProps
 
 export default function LoadingButton({ isloading, children, ...props}: LoadingButtonProps & ButtonProps) {
   return (
-    <Button {...props}>
+    <Button {...props} disabled={isloading}>
         {isloading &&
         <>
         <Spinner
