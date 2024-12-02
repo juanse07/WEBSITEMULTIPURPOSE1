@@ -65,7 +65,7 @@ function LoggedIniew( {user}: LoggedIniewProps) {
                     active={router.pathname==="/blog/new-post"} 
                     className='link-primary d-flex align-items-center gap-1 me-3'>
                     <FiEdit/>
-                    New Order
+                   Book a Service
        </Nav.Link>
        <Navbar.Text
        className="d-flex align-items-center gap-2">

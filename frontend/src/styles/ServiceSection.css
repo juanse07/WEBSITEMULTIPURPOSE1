@@ -1,0 +1,95 @@
+.service-section {
+    background-color: #1a1f2e;
+  margin-bottom: 8rem;
+  padding: 3rem 2rem;
+  border-radius: 8px;
+  max-width: 800px;  /* Add a max-width to control the container size */
+  margin-left: auto;  /* Center the container */
+  margin-right: auto;
+  position:  relative;
+  }
+
+  .service-section {
+    transition: margin 0.3s ease;
+  }
+  @media (max-width: 768px) {
+    .service-section {
+      margin-bottom: 6rem !important;
+      padding: 2rem 1rem;
+    }
+  }
+  .service-section:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    transform: translateX(10px);
+  }
+  
+  .service-container {
+    max-width: 1200px;
+    padding-top: 4rem;
+    padding-bottom: 4rem;
+  }
+  
+  .service-row {
+    margin: 0;
+    max-width: 100%;
+  }
+  
+  .service-content {
+    color: white;
+  }
+  
+  .service-category {
+    color: #6c757d;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+  }
+  
+  .service-title {
+    margin: 1rem 0;
+    font-size: 2rem;
+    color: white;
+  }
+  
+  .service-description {
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 1.5rem;
+  }
+  
+  .service-button {
+    border-color: rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.5rem 1.5rem;
+  }
+  
+  .service-button:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: white;
+  }
+  
+  .service-icon {
+    color: rgba(255, 255, 255, 0.7);
+    transition: color 0.2s ease;
+  }
+  
+  .service-icon:hover {
+    color: white;
+  }
+  
+  .service-image-col {
+    text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  }
+  
+  .service-image {
+  width: 100%;
+  height: auto;
+  object-fit: contain;  
+  padding: '10px';
+ margin: '10px';
+  }
+  
+  /* Add this to your global CSS if you want a dark background */
+  body {
+    background-color: #121621;
+  }

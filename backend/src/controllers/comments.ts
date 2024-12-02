@@ -16,7 +16,7 @@ import createHttpError from "http-errors";
 export const getCommentsForBlogPosts: RequestHandler<GetCommentsParams, unknown,unknown,GetCommentsQuery> = async (req, res, next) => {
     const { blogPostId } = req.params;
     const {continueAfterId}= req.query;
-    const pageSize = 3;
+    const pageSize = 4;
 
 try {
     const query = CommentModel
@@ -58,7 +58,7 @@ export const getCommentReplies: RequestHandler<GetCommentsRepliesParams,unknown,
     
     const{commentPostId:parentCommentId } = req.params;
     const {continueAfterId} = req.query;
-    const pageSize = 2;
+    const pageSize = 4;
     try {
         const query = CommentModel
         .find({parentCommentId})

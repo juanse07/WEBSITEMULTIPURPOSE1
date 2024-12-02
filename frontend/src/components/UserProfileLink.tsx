@@ -19,7 +19,7 @@ export default function UserProfileLink({ user }: UserProfileLinkProps) {
             </Tooltip>
         }
         delay={{show:500, hide:0}}>
-       <span className='d-flex aling-items-center w-fit-content'>
+       <span className='d-flex aling-items-center w-fit-content '>
             <Image 
             src={user.profilePicUrl || profilePicPlaceholder} 
             alt={"Profile picture of " + user.username} 

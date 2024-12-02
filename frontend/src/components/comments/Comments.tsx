@@ -95,15 +95,19 @@ function CommentLayout({comments, onReplyClicked,onEditClicked,onDeleteClicked}:
     const{user}= useAuthenticatedUser();
     const loggedInUserIsAuthor = (user && user._id === comments.author._id) || false;
     return (
-        <div>
-            <div className='mb-2'>{comments.text}</div>
-            <div className='d-flex gap-2 align-items-center'>
-                <UserProfileLink user={comments.author}/>
+        <div className='p-3'>
+            <div className='mb-2  whitespace-pre-wrap break-word'>{comments.text}</div>
+            <div className='d-flex gap-2 align-items-center text-sm '>
+                <UserProfileLink 
+                user={comments.author}
+                />
+                <p className='text-muted small '>
                 {formatRelativeDate(comments.createdAt)}
                 {comments.updatedAt > comments.createdAt && <span> (edited)</span>}
+                </p>
                 
             </div>
-            <div className= "mt-1 d-flex gap-2">
+            <div className= "mt-1 d-flex gap-2 ">
                 <Button
                 variant="link"
                 className='small'
