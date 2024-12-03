@@ -22,21 +22,23 @@ export default function Home({}) {
   // Define services array with the type
   const services: Service[] = [
     {
-      category: "CLEANING SERVICES",
-      title: "We got you cover around all metro area",
-      description: "And those who were seen dancing were thought to be insane by those who could not hear the music.",
-      price: 0.1,
-      imageUrl: "/aspi.png",
-      imagePosition: "right" as const  // Type assertion to literal
-    },
-    {
       category: "HandyMan",
       title: "hangin' out with the best",
       description: "You have to be willing to be misunderstood if you're going to innovate.",
       price: 0.12,
       imageUrl: "/martillando.png",
-      imagePosition: "left" as const
+      imagePosition: "right" as const
     },
+   
+    {
+      category: "CLEANING SERVICES",
+      title: "We got you cover around all metro area",
+      description: "And those who were seen dancing were thought to be insane by those who could not hear the music.",
+      price: 0.1,
+      imageUrl: "/aspi.png",
+      imagePosition: "left" as const  // Type assertion to literal
+    },
+  
     {
       category: "Gardening",
       title: "We got you cover around all metro area",

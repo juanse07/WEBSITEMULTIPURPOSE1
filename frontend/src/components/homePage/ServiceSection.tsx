@@ -51,7 +51,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
               src={imageUrl} 
               alt={title}
               width={400}
-              height={300} 
+              height={350} 
               className="service-image"
             />
           </Col>
