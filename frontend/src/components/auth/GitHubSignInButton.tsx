@@ -1,6 +1,6 @@
 import { useRouter } from "next/router";
 import { Button } from "react-bootstrap";
-import { BsGithub } from "react-icons/Bs";
+import { BsGithub } from "react-icons/bs";
 export default function GitHubSignInButton() {
     const router = useRouter();
     return (
