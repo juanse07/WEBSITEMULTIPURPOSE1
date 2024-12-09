@@ -37,5 +37,5 @@ axiosInstance.interceptors.response.use(null, error => {
         }
     }
     throw error;
-},{synchronous:true});
+},);
 export default axiosInstance;
