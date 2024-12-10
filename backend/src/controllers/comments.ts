@@ -1,6 +1,6 @@
 
 import { RequestHandler } from "express";
-import CommentModel from "../models/Comments";
+import CommentModel from "../models/comments";
 import {CreateCommentBody, CreateCommentParams, DeleteCommentParams, GetCommentsParams, GetCommentsQuery, GetCommentsRepliesParams, GetCommentsRepliesQuery, UpdateCommentBody, UpdateCommentParams} from "../validation/comments";
 
 import  assertIsDefined  from "../utils/assertIsDefined";
