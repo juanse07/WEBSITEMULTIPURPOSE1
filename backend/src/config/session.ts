@@ -3,6 +3,7 @@ import env from '../env'
 //import MongoStore from 'connect-mongo'
 import RedisStore from 'connect-redis'  
 import redisClient from './redisClient'
+import crypto from 'crypto'
 const sessionConfig: SessionOptions ={
     secret: env.SESSION_SECRET,
     resave: false,
