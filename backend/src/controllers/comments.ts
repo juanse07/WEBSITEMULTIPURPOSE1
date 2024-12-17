@@ -2,11 +2,10 @@
 import { RequestHandler } from "express";
 import CommentModel from "../models/comment";
 
-import {CreateCommentBody, CreateCommentParams, DeleteCommentParams, GetCommentsParams, GetCommentsQuery, GetCommentsRepliesParams, GetCommentsRepliesQuery, UpdateCommentBody, UpdateCommentParams} from "../validation/comments";
+import { CreateCommentBody, CreateCommentParams, DeleteCommentParams, GetCommentsParams, GetCommentsQuery, GetCommentsRepliesParams, GetCommentsRepliesQuery, UpdateCommentBody, UpdateCommentParams } from "../validation/comments";
 
-import  assertIsDefined  from "../utils/assertIsDefined";
-import mongoose from "mongoose";
 import createHttpError from "http-errors";
+import assertIsDefined from "../utils/assertIsDefined";
 
 
 
@@ -81,6 +80,7 @@ export const getCommentReplies: RequestHandler<GetCommentsRepliesParams,unknown,
 
         
     } catch (error) {
+        next(error);
         
     }
 }

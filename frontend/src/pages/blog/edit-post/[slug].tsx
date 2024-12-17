@@ -156,7 +156,7 @@ export default function EditBlogPostPage({post}: EditBlogPostPageProps) {
                 register={register("featuredImage")}
                 label="Post Image"
                 type="file"
-                accept="image/png, image/jpeg"
+                accept="image/png, image/jpeg,image/jpg"
                 error={errors.featuredImage}
                 
                 />

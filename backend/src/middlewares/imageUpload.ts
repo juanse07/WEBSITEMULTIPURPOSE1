@@ -6,7 +6,7 @@ export const profilePicUpload = multer({
         fileSize: 5 * 1024 * 1024, // 5MB
     },
     fileFilter: (req, file, cb) => {
-        if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        if(file.mimetype === 'image/jpg' ||file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
             cb(null, true);
         }else{
             cb(new Error('File type not supported'));
@@ -21,7 +21,7 @@ limits:{
     fileSize: 5 * 1024 * 1024, // 5MB
 },
 fileFilter: (req, file, cb) => {
-    if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+    if(file.mimetype === 'image/jpg' ||file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
         cb(null, true);
     }else{
         cb(new Error('File type not supported'));
@@ -35,7 +35,7 @@ export const inPostImageUpload = multer({
         fileSize: 5 * 1024 * 1024, // 5MB
     },
     fileFilter: (req, file, cb) => {
-        if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
+        if(file.mimetype === 'image/jpg' ||file.mimetype === 'image/jpeg' || file.mimetype === 'image/png'){
             cb(null, true);
         }else{
             cb(new Error('File type not supported'));

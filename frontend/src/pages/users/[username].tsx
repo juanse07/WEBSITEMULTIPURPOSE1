@@ -1,28 +1,25 @@
 import { User } from '@/models/user';
-import { GetServerSideProps } from 'next';
-import * as UserApi from '@/network/api/user';
 import * as BlogApi from '@/network/api/blog';
+import * as UserApi from '@/network/api/user';
+import { GetServerSideProps } from 'next';
 
-import { useState, useEffect } from 'react';
-import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
-import Head from 'next/head';
-import { Col, Form, Row, Spinner } from 'react-bootstrap';
-import styles from '@/styles/UserProfilePage.module.css';
-import Image from 'next/image';
 import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
-import { formatDate } from '@/utils/utils';
-import * as yup from "yup";
-import{useForm} from "react-hook-form"
+import BlogPostsGrid from '@/components/BlogPostsGrid';
 import FormInputField from '@/components/form/FormInputField';
 import LoadingButton from '@/components/LoadingButton';
-import useSWR from 'swr';
-import { NotFoundError } from "@/network/api/http-errors";
-import BlogPostsGrid from '@/components/BlogPostsGrid'
 import PaginationBar from '@/components/PaginationBar';
-import AuthGuard from '@/components/auth/AuthGuard';
-import nProgress, { set } from "nprogress";
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import { useUnsavedChangesWarning } from '@/hooks/useUnsavedChangesWarning';
-import AuthorizedContentGuard from '@/components/auth/AuthorizedContentGuard';
+import { NotFoundError } from "@/network/api/http-errors";
+import styles from '@/styles/UserProfilePage.module.css';
+import { formatDate } from '@/utils/utils';
+import Head from 'next/head';
+import Image from 'next/image';
+import { useState } from 'react';
+import { Col, Form, Row, Spinner } from 'react-bootstrap';
+import { useForm } from "react-hook-form";
+import useSWR from 'swr';
+import * as yup from "yup";
 
 
 
@@ -186,7 +183,7 @@ function UpdateUserProfileSection({onUserUpdated} : UpdateUserProfileSectionProp
                 register={register("profilePic")}
                 label="Profile Picture"
                 type="file"
-                accept="image/png, image/jpeg" 
+                accept="image/png, image/jpeg,image/jpg" 
                 />
 
                 <LoadingButton type="submit" isloading={isSubmitting} className="mt-3">Update</LoadingButton>

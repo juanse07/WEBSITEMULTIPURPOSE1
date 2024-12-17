@@ -40,7 +40,7 @@ export default function MarkDownEditor({register,watch,setValue, label, error, e
                 className= {error ? "is-invalid" : ""}
                 style={{height: editorheight}}
                 onImageUpload={uploadInpostImage}
-                imageAccept=".jpeg,.png"
+                imageAccept=".jpeg,.png,.jpg"
             />
             <Form.Control.Feedback type="invalid">
                 {error?.message}
