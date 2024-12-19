@@ -1,26 +1,18 @@
 
 
+import AuthModalsProvider from '@/components/auth/AuthModalsProvider';
+import NavBar from '@/components/NavBar';
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
+import styles from "@/styles/App.module.css";
 import '@/styles/globals.scss';
 import '@/styles/utils.css';
 import type { AppProps } from 'next/app';
 import { Inter } from 'next/font/google';
 import Head from 'next/head';
-import { Container, Navbar, SSRProvider } from 'react-bootstrap';
-import styles from "@/styles/App.module.css";
-import NavBar from '@/components/NavBar';
-import Footer from '@/components/Footer';
-import NextNProgress from 'nextjs-progressbar';
-import { Sign } from 'crypto';
-import SignUpModal from '@/components/auth/SignUpModal';
-import LogInModal from '@/components/auth/LogInModal';
-import { on } from 'events';
-import { use, useEffect, useState } from 'react';
-import {User} from '@/models/user';
-import * as UsersApi from '@/network/api/user';
-import useSwr from 'swr';
-import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
 import { useRouter } from 'next/router';
-import AuthModalsProvider from '@/components/auth/AuthModalsProvider';
+import NextNProgress from 'nextjs-progressbar';
+import { useEffect } from 'react';
+import { Container } from 'react-bootstrap';
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -58,7 +50,7 @@ return(
         <meta property= "og:image" content="htttps://thehandyjuan.com/social_media_preview_image.png"/> 
         <meta name="twitter:card" content='summary_large_image'/>
      </Head>
-      <SSRProvider>
+ 
         <AuthModalsProvider>
       <div className={inter.className}>
 
@@ -83,7 +75,7 @@ return(
       
      </div>
      </AuthModalsProvider>
-     </SSRProvider>
+    
 </>
 
    );
