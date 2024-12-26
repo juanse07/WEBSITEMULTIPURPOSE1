@@ -1,19 +1,16 @@
+import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
+import logo from "@/assets/images/technician (3).png";
+import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
+import { User } from '@/models/user';
+import styles from '@/styles/NavBar.module.css';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import { Button, Nav,Navbar, NavDropdown  } from 'react-bootstrap';
-import { FiEdit} from 'react-icons/fi';
-import logo from "@/assets/images/technician (3).png";
-import Image from 'next/image';
-import styles from '@/styles/NavBar.module.css';
-import useAuthenticatedUser from '@/hooks/useAuthenticatedUser';
-import { useContext, useState } from 'react';
-import LogInModal from './auth/LogInModal';
-import SignUpModal from './auth/SignUpModal';
-import { User } from '@/models/user';
-import profilePicPlaceholder from '@/assets/images/profile-pic-placeholder.png';
+import { useContext } from 'react';
+import { Button, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import { FiEdit } from 'react-icons/fi';
 
 import * as UsersApi from '@/network/api/user';
-import ResetPasswordModal from './auth/ResetPasswordModal';
 import { AuthModalsContext } from './auth/AuthModalsProvider';
 
 export default function NavBar() {
@@ -24,7 +21,7 @@ export default function NavBar() {
             <Navbar.Brand as={Link} href='/' className='d-flex align-items-center gap-1'>
             <Image src={logo} alt="technician (3)" width={30} height={30}/> 
             <span className={styles.brandText}>
-                HandyJuan
+              Elego Prime
             </span>
             </Navbar.Brand>
             <Navbar.Toggle aria-controls='main-navbar'/>

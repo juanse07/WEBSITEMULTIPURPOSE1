@@ -7,7 +7,7 @@ interface Service {
   price: number;
   imageUrl: string;
   imagePosition?: 'left' | 'right';
-  backgroundColor?: string;
+  backgroundHandler?: string;
   fontColor?: string; // For dynamic font color
   buttonStyle?: 'primary' | 'outline-primary' | 'outline-secondary'; // For dynamic button style
   hightLightsBackgroundColor?: string; // For dynamic button style
@@ -32,7 +32,8 @@ export default function Home() {
       price: 0.1,
       imageUrl: "/aspi.png",
       imagePosition: "left" as const,
-      backgroundColor: "#000000",
+     backgroundHandler:"linear-gradient(to bottom, #000000, #1C1C1E4)",
+      // backgroundColor: "#000000",
       buttonStyle: "primary",
       fontColor: "#ffffff",
       hightLightsBackgroundColor: "linear-gradient(135deg, #2C2E43, #1C1C1E)",
@@ -54,7 +55,7 @@ export default function Home() {
       price: 0.12,
       imageUrl: "/martillando.png",
       imagePosition: "right" as const, 
-      backgroundColor: "#F7F7FF",
+      backgroundHandler: "#F7F7FF",
       buttonStyle: "primary",
      fontColor: "#212529",
      hightLightsBackgroundColor: "linear-gradient(135deg, #E4e8f6, #f4f4f4)",
@@ -75,8 +76,8 @@ export default function Home() {
       description: "Bringing green dreams to life with expert care and attention.",
       price: 0.1,
       imageUrl: "/GardenDD.png",
-      imagePosition: "right" as const,
-      backgroundColor: "#545E75",
+      imagePosition: "left" as const,
+      backgroundHandler: "#545E75",
       hightLightsBackgroundColor: "linear-gradient(135deg, #2C2E43, #545E7F)",  
       HlTitleFont: "#00ACC1",
       HLbodyFont: "#F7F7FF",
@@ -96,7 +97,7 @@ export default function Home() {
       description: "From packing to unloading, trust us to care for your belongings..",
       price: 0.12,
       imageUrl: "/moving1.png",
-      imagePosition: "left" as const,
+      imagePosition: "right" as const,
       hightLightsBackgroundColor: "linear-gradient(135deg, #E4e8f6, #f4f4f4)",
       HlTitleFont: "#4682B4",
       HLbodyFont: "#212529",
@@ -122,7 +123,7 @@ export default function Home() {
           price={service.price}
           imageUrl={service.imageUrl}
           imagePosition={service.imagePosition}
-          backgroundColor={service.backgroundColor}
+          backgroundHandler={service.backgroundHandler}
           fontColor={service.fontColor}
           buttonStyle={service.buttonStyle}
           hightLightsBackgroundColor={service.hightLightsBackgroundColor}

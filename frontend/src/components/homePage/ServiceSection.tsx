@@ -13,7 +13,7 @@ interface ServiceSectionProps {
   price: number;
   imageUrl: string;
   imagePosition?: 'left' | 'right';
-  backgroundColor?: string;
+  backgroundHandler?: string;
   fontColor?: string; // For dynamic font color
   buttonStyle?: 'primary' | 'outline-primary' | 'outline-secondary';
   hightLightsBackgroundColor?: string // For dynamic button style
@@ -37,7 +37,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
   price,
   imageUrl,
   imagePosition = 'right',
-  backgroundColor = '#FFFFFF', // Default background color if none provided
+  backgroundHandler='#FFFFFF', // Default background color if none provided
   fontColor = '#000000',
   buttonStyle = 'primary',
   hightLightsBackgroundColor = '#FFFFFF',
@@ -61,7 +61,7 @@ const ServiceSection: React.FC<ServiceSectionProps> = ({
     <section
        className={styles.serviceSection}
        style={{
-         backgroundColor,
+         backgroundColor: backgroundHandler, // Apply background color
          color: fontColor, // Apply font color
          padding: '3rem',
          borderRadius: '8px',
